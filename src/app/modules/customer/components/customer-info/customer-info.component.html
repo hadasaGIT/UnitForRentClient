@@ -1,0 +1,81 @@
+<mat-sidenav-container style="height: calc(100vh - 20px)">
+  <mat-card>
+    <mat-card-content>
+      <form *ngIf="updateForm" [formGroup]="updateForm">
+        <h2>עדכון פרטים</h2>
+        <mat-error *ngIf="!updateForm.valid">
+          יש למלא את כל שדות החובה כנדרש!
+        </mat-error>
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>שם פרטי</mat-label>
+          <input matInput formControlName="firstName" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>שם משפחה</mat-label>
+          <input matInput formControlName="lastName" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>מספר טלפון</mat-label>
+          <input matInput formControlName="phon1" required />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label> מספר טלפון נוסף</mat-label>
+          <input matInput formControlName="phon2" />
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>אימייל</mat-label>
+          <input
+            matInput
+            placeholder="email@example.com"
+            formControlName="email"
+            required
+          />
+          <mat-error> יש לציין כתובת דואר אלקטרוני חוקית. </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="full-width-input">
+          <mat-label>סיסמא</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            required
+            [type]="hide ? 'password' : 'text'"
+            [type]="hide ? 'password' : 'text'"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hide = !hide"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide"
+          >
+            <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+
+          <mat-error> יש לציין סיסמא חוקית. </mat-error>
+        </mat-form-field>
+        <div
+          class="input-group d-flex justify-content-evenly"
+          style="width: 100%"
+        >
+        <button
+          (click)="update()"
+          [disabled]="!updateForm.valid"
+          mat-raised-button
+          color="primary"
+        >
+          עדכון
+        </button>
+        <button (click)="undoChanges()" mat-raised-button color="primary">
+          בטל שינויים
+        </button>
+      </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</mat-sidenav-container>

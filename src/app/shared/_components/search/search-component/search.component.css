@@ -1,0 +1,56 @@
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+.mat-form-field {
+  text-align: right;
+}
+
+#map {
+  height: 100%;
+}
+
+/* Optional: Makes the sample page fill the window. */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.text-bottom{
+  border-left-style: ridge;
+  padding: 0 12px 0 14px;
+  font-size: 16px;
+  color: #182850;
+  font-weight: 600;
+  align-items: center;
+}
+
+h2{
+    font-weight: bold;
+    line-height: 1.3;
+    color: #283149;
+}
+.main-title {
+  font-size: 3em;
+  line-height: 91px;
+  font-weight: bold;
+  color: rgb(40, 49, 73);
+}
+.cat {
+  width: 4vh;
+  height: 2.5vw;
+}
+
+.mat-expansion-panel-header:not([aria-disabled=true]) {
+  height: 150px;
+}
+.card-housing-unit{
+  height: 145px;
+  width:100%;
+  direction: ltr;
+}
+img{
+  width: 14em;
+  height: 10em;
+}

@@ -1,4 +1,14 @@
-<mat-toolbar color="white" border="2" style="height: 15vh">
+<mat-toolbar
+  color="white"
+  border="2"
+  style="
+    height: auto;
+    border-bottom: 0.7px solid #a59393;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  "
+>
   <a class="navbar-brand me-2" href="#">
     <img
       src="../assets/img/LOGOֹֹ2.png"
@@ -12,12 +22,34 @@
 
   <span class="example-spacer"></span>
   <div fxShow="true" fxHide.lt-md="true">
-     <!--<a href="#" mat-stroked-button mat-warn>Menu Item 2</a>
-    <a href="#" mat-stroked-button mat-warn>Menu Item 3</a>
-    <a href="#" mat-stroked-button mat-warn>Menu Item 4</a>
-    <a href="#" mat-stroked-button mat-warn>Menu Item 5</a>
-    <a href="#" mat-stroked-button mat-warn>Menu Item 6</a>-->
-    <a routerLink="/login" mat-stroked-button mat-warn>התחברות</a>
+    <div>
+      <button mat-button routerLink="/login" class="me-3">
+        <mat-icon>power_settings_new</mat-icon>
+        התחברות
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        routerLink="/customer/publish"
+        class="me-4"
+      >
+        פרסום מודעה
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        routerLink="/customer"
+        class="me-4"
+      >
+        אזור אישי
+      </button>
+    </div>
+
+    <!--<button mat-button>
+      <mat-icon>exit_to_app</mat-icon>
+      Logout
+    </button>
+    <a routerLink="/login" mat-stroked-button mat-warn>התחברות</a>-->
   </div>
 
   <div fxShow="true" fxHide.gt-sm="true">
@@ -69,4 +101,5 @@
 <!-- Collapsible wrapper 
 </nav>-->
 <!-- Navbar -->
+
 <router-outlet></router-outlet>

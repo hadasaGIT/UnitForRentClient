@@ -15,7 +15,12 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatStepperModule } from '@angular/material/stepper';
+import {
+  MatStepper,
+  MatStepperModule,
+  MatStepperNext,
+  MatStepperPrevious,
+} from '@angular/material/stepper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
@@ -43,6 +48,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { FlexLayoutModule } from '@angular/flex-layout';
+
 @NgModule({
   exports: [
     FlexLayoutModule,
@@ -90,6 +96,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     OverlayModule,
     PortalModule,
     ScrollingModule,
+    MatStepperModule,
+    MatInputModule,
+    MatButtonModule,
+    MatAutocompleteModule,
+    // MatStepperNext,
+    // MatStepper,
   ],
 })
 export class MaterialModule {}
