@@ -1,11 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { HousingUnitRelevant } from 'src/app/modules/customer/models/housing-unit-relevant.model';
+import { HousingUnitRelevantService } from 'src/app/modules/customer/services/housing-unit-relevant.service';
 import { HousingUnitFull } from 'src/app/shared/_models/housing-unit-full.model';
+import { PropertyCondition } from 'src/app/shared/_models/propery-condition.model';
 import { HousingUnitFullService } from 'src/app/shared/_services/housing-unit-full.service';
 import { HousingUnitImageService } from 'src/app/shared/_services/housing-unit-image.service';
+import { PropertyConditionService } from 'src/app/shared/_services/property-condition.service';
 import { HousingUnit } from '../../../_models/housing-unit.model';
-import { HousingUnitService } from '../../../_services/housing-unit.service';
 import { Search } from './../models/search.model';
 import { SearchService } from './../services/search.service';
 
@@ -20,8 +23,12 @@ export class SearchComponent implements OnInit {
   address: string;
   listHousingUnit: HousingUnit[];
   panelOpenState = false;
-  listHousingUnitFull: HousingUnitFull[] = [];
-  
+  listPropertyConditions: PropertyCondition[];
+  open: boolean = false;
+  // mapHousingUnitImage: Map<HousingUnit, string> = new Map<
+  //   HousingUnit,
+  //   string
+  // >();
 
   // title = 'autoCompleteGoogleMaps';
   // lat = 51.678418;
@@ -30,7 +37,10 @@ export class SearchComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private _service: SearchService,
-    private _housingUnitFullService: HousingUnitFullService
+    private _serviceHousingUnitImage: HousingUnitImageService,
+    private _serviceHousingUnitRelevant: HousingUnitRelevantService,
+    private _serviceHousingUnitFull: HousingUnitFullService,
+    private _servicePropertyCondition: PropertyConditionService
   ) {}
 
   ngOnInit() {
@@ -38,34 +48,40 @@ export class SearchComponent implements OnInit {
     console.log(this.address);
     this.initForm(new Search());
     this.search();
+    this.getPropertyCondition();
   }
-
+  getPropertyCondition() {
+    this._servicePropertyCondition
+      .getAllPropertyConditions()
+      .subscribe((res) => {
+        console.log(res);
+        this.listPropertyConditions = res;
+      });
+  }
   search() {
     this.searchParams = this.formSearch.value;
     console.log(this.searchParams);
     this._service.search(this.searchParams).subscribe((res) => {
-      console.log(res);
       this.listHousingUnit = res;
-      this.listHousingUnit.forEach((element) => {
-        this.listHousingUnitFull.push(this._housingUnitFullService.GetHousingUnitFull(element))
-      });
-      console.log(this.listHousingUnitFull);
+      this._serviceHousingUnitFull.GetHousingUnitFull(res);
+      // this.listHousingUnit.forEach((element) => {
+      //   this._serviceHousingUnitImage
+      //     .GetHousingUnitImageById(Number(element.id))
+      //     .subscribe((image) => {
+      //       this.mapHousingUnitImage.set(element, image.images);
+      //       console.log(this.mapHousingUnitImage);
+      //     });
+      // });
+      //להחזיר מהשרת מערך של פולים לפי הרז.
     });
   }
-  favorite() {
-    
+  isFavorite(id: string) {
+    // console.log(this._serviceHousingUnitRelevant.listHousingUnitRelevant);
+    // console.log(this._serviceHousingUnitRelevant.isRelevantById(Number(id)));
+    return this._serviceHousingUnitRelevant.isRelevantById(Number(id));
   }
-
-  // base64: string | ArrayBuffer | null = null;
-  // uploadFile(fileInput: any) {
-  //   console.log(fileInput.files[0]);
-  //   let reader = new FileReader();
-  //   reader.readAsDataURL(fileInput.files[0]);
-  //   reader.onload = () => {
-  //     console.log(reader.result);
-  //     this.base64 = reader.result;
-  //   };
-  // }
+  addFavorite(id: string) {}
+  removeFavorite(id: string) {}
 
   initForm(search: Search): void {
     this.formSearch = new FormGroup({
@@ -89,7 +105,6 @@ export class SearchComponent implements OnInit {
       ToArea: new FormControl(search.ToArea),
       MinRoomsNum: new FormControl(search.MinRoomsNum),
       MaxRoomsNum: new FormControl(search.MaxRoomsNum),
-
       MinPrice: new FormControl(search.MinPrice),
       MaxPrice: new FormControl(search.MaxPrice),
 
@@ -106,4 +121,138 @@ export class SearchComponent implements OnInit {
       Terrace: new FormControl(search.Terrace),
     });
   }
+  openFilter() {
+    this.open = !this.open;
+    console.log(this.open);
+  }
 }
+// <!--<mat-checkbox class="m-1" formControlName="Parking"> חניה</mat-checkbox>
+// <mat-checkbox formControlName="PandorDoors"> דלתות פנדור</mat-checkbox>
+// <mat-checkbox formControlName="SolarHeater"> דוד שמש</mat-checkbox>
+// <mat-checkbox formControlName="AirConditioning">
+//   מיזוג אוויר</mat-checkbox
+// >
+// <mat-checkbox formControlName="AccessForDisabled">
+//   גישה לנכים</mat-checkbox
+// >
+// <mat-checkbox formControlName="Animal"> בעלי חיים</mat-checkbox> -->
+// <!--חנייה-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="Parking"
+//   autocomplete="off"
+//   formControlName="Parking"
+// />
+// <label class="btn btn-outline-primary m-1" for="Parking"
+//   >חנייה<mat-icon> local_parking</mat-icon></label
+// >
+// <!--ממ"ד-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="SecurityRoom"
+//   autocomplete="off"
+//   formControlName="SecurityRoom"
+// />
+// <label class="btn btn-outline-primary m-1" for="SecurityRoom"
+//   >ממ"ד<mat-icon>security</mat-icon></label
+// >
+// <!--מחסן
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="btn-check3"
+//   autocomplete="off"
+// />
+// <label class="btn btn-outline-primary" for="btn-check3">מחסן</label>-->
+// <!--גישה לנכים-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="AccessForDisabled"
+//   autocomplete="off"
+//   formControlName="AccessForDisabled"
+// />
+// <label class="btn btn-outline-primary m-1" for="AccessForDisabled"
+//   >גישה לנכים<mat-icon>accessible</mat-icon></label
+// >
+// <!--מעלית-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="Elevator"
+//   autocomplete="off"
+//   formControlName="Elevator"
+// />
+// <label class="btn btn-outline-primary m-1" for="Elevator"
+//   >מעלית<span class="material-icons">elevator</span></label
+// >
+// <!--מרפסת-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="Terrace"
+//   autocomplete="off"
+//   formControlName="Terrace"
+// />
+// <label class="btn btn-outline-primary m-1" for="Terrace"
+//   >מרפסת<span class="material-icons">balcony</span></label
+// >
+// <!--דוד שמש-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="SolarHeater"
+//   autocomplete="off"
+//   formControlName="SolarHeater"
+// />
+// <label class="btn btn-outline-primary m-1" for="SolarHeater"
+//   >דוד שמש<mat-icon>wb_sunny</mat-icon></label
+// >
+// <!--מיזוג אוויר-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="AirConditioning"
+//   autocomplete="off"
+//   formControlName="AirConditioning"
+// />
+// <label class="btn btn-outline-primary m-1" for="AirConditioning"
+//   >מיזוג אוויר<mat-icon>ac_unit</mat-icon></label
+// >
+// <!--דלתות פנדור-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="PandorDoors"
+//   autocomplete="off"
+//   formControlName="PandorDoors"
+// />
+// <label class="btn btn-outline-primary m-1" for="PandorDoors"
+//   >דלתות פנדור<span class="material-icons">sensor_door</span></label
+// >
+// <!--בעלי חיים-->
+// <input
+//   mdbCheckbox
+//   type="checkbox"
+//   class="btn-check"
+//   id="Animal"
+//   autocomplete="off"
+//   formControlName="Animal"
+// />
+// <label class="btn btn-outline-primary m-1" for="Animal"
+//   >בע"ח<img
+//     class="cat"
+//     src="../../../../../assets/icons/cat.jpg"
+//     alt="animal"
+// /></label>

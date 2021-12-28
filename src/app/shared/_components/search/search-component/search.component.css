@@ -17,7 +17,7 @@ body {
   padding: 0;
 }
 
-.text-bottom{
+.text-bottom {
   border-left-style: ridge;
   padding: 0 12px 0 14px;
   font-size: 16px;
@@ -26,17 +26,34 @@ body {
   align-items: center;
 }
 
-h2{
-    font-weight: bold;
-    line-height: 1.3;
-    color: #283149;
+.btn-search {
+  background-color: #dd0a35;
+  color: #fff;
+  width: 4.5em;
+  font-size: 22px;
+  height: 2.4em;
 }
+
+.filters {
+  border-top: 0.7px solid #a59393;
+  overflow-y: auto;
+  padding: 8% 2% 8% 2%;
+  background-color: #f7f7f7;
+}
+
+h2 {
+  font-weight: bold;
+  line-height: 1.3;
+  color: #283149;
+}
+
 .main-title {
   font-size: 3em;
   line-height: 91px;
   font-weight: bold;
   color: rgb(40, 49, 73);
 }
+
 .cat {
   width: 4vh;
   height: 2.5vw;
@@ -45,12 +62,78 @@ h2{
 .mat-expansion-panel-header:not([aria-disabled=true]) {
   height: 150px;
 }
-.card-housing-unit{
+
+.card-housing-unit {
   height: 145px;
-  width:100%;
+  width: 100%;
   direction: ltr;
 }
-img{
+
+img {
   width: 14em;
   height: 10em;
+}
+
+.closeImg,
+.openImg {
+  text-align: right;
+  direction: rtl;
+  color: #283149;
+  cursor: pointer;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  background-image: url(../../../../../assets/icons/filter.png);
+}
+
+.openImg {
+  filter: brightness(0) invert(1);
+
+}
+
+.open {
+  background-color: #283149;
+  text-align: right;
+  direction: rtl;
+  /* color: #fff; */
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  vertical-align: baseline;
+  width: 50px;
+  border-radius: 4px;
+  border: solid 1px #fff;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
+}
+
+.close {
+  text-align: right;
+  direction: rtl;
+  color: #283149;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  vertical-align: baseline;
+  width: 50px;
+  border-radius: 4px;
+  border: solid 1px #283149;
+  background-color: #fff;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  align-items: center;
 }

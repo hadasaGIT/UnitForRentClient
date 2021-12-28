@@ -13,24 +13,31 @@ export class HousingUnitFullService {
     private _serviceHousingUnitRelevantService: HousingUnitRelevantService
   ) {}
 
-  GetHousingUnitFull(housingUnit: HousingUnit): HousingUnitFull {
-    this._serviceHousingUnitImage
-      .GetHousingUnitImageById(Number(housingUnit.id))
-      .subscribe((image) => {
-        return new HousingUnitFull(
-          housingUnit,
-          image.images,
-          this._serviceHousingUnitRelevantService.isRelevantById(
-            Number(housingUnit.id)
-          )
-        );
-      });
-    return new HousingUnitFull(
-      housingUnit,
-      '',
-      this._serviceHousingUnitRelevantService.isRelevantById(
-        Number(housingUnit.id)
-      )
-    );
+  GetHousingUnitFull(housingUnit: HousingUnit[]) {
+    
+    
+
+    // this._serviceHousingUnitImage
+    //   .GetHousingUnitImageById(Number(housingUnit.id))
+    //   .subscribe(
+    //     (image) => {
+    //       return new HousingUnitFull(
+    //         housingUnit,
+    //         image.images,
+    //         this._serviceHousingUnitRelevantService.isRelevantById(
+    //           Number(housingUnit.id)
+    //         )
+    //       );
+    //     },
+    //     (error) => {
+    //       return new HousingUnitFull(
+    //         housingUnit,
+    //         "",
+    //         this._serviceHousingUnitRelevantService.isRelevantById(
+    //           Number(housingUnit.id)
+    //         )
+    //       );
+    //     }
+    //   );
   }
 }
