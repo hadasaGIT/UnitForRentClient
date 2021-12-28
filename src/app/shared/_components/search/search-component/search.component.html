@@ -19,7 +19,7 @@
               formControlName="City"
             />
           </div>
-          <!--קומה-->
+          <!--חדרים-->
           <div class="form-group" style="width: 49%">
             <label for="MinRoomsNum"><b>חדרים</b></label>
             <div class="input-group d-flex justify-content-between">
@@ -65,30 +65,32 @@
               />
             </div>
           </div>
+
           <div
             class="d-flex justify-content-between"
             style="width: 49%; padding-top: 2%"
           >
             <!--מצב הנכס-->
-            <mat-form-field appearance="fill" style="width: 49%">
+            <mat-form-field appearance="fill" style="width: 48%">
               <mat-label>מצב הנכס</mat-label>
               <mat-select formControlName="PropertyCondition">
                 <mat-option
                   *ngFor="let p of listPropertyConditions"
-                  value="{{ p.id }}"
+                  [value]="p.id"
                 >
                   {{ p.condition }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
 
+            <!--כפתור פילטר לפרמטרים נוספים-->
             <div
               [ngClass]="{ open: open, close: !open }"
               (click)="openFilter()"
             >
               <div [ngClass]="{ openImg: open, closeImg: !open }"></div>
             </div>
-
+            <!--כפתור חיפוש-->
             <button
               [disabled]="!formSearch.valid"
               (click)="search()"
@@ -145,6 +147,7 @@
             </div>
           </div>
           <label for="Extras"><b>תוספות</b></label>
+          <!--checkboxes-->
           <div class="checkboxes" id="Extras">
             <!--חנייה-->
             <input
@@ -260,16 +263,7 @@
     </mat-card-content>
   </mat-card>
 
-  <!--<li *ngFor="let HousingUnit of listHousingUnit" class="list-group-item">
-    <div class="row">
-      <div class="col-1">{{ HousingUnit.id }}</div>
-      <div class="col-2">עיר : {{ HousingUnit.city }}</div>
-      <div class="col-2">מחיר: {{ HousingUnit.price }}</div>
-      <div class="col-2">קומה: {{ HousingUnit.floor }}</div>
-      <div class="col-2">שטח: {{ HousingUnit.area }}</div>
-    </div>
-  </li>-->
-
+  <!--הצגת יחידות דיור תואמות לפרמטרי החיפוש-->
   <mat-accordion>
     <mat-expansion-panel
       *ngFor="let HousingUnit of listHousingUnit"
