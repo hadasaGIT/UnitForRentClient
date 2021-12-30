@@ -1,0 +1,54 @@
+
+<ng-container *ngIf="customer">
+    <form action="" style="margin-top: 600px;">
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>תעודת תזהות:</mat-label>
+                <input matInput value="{{customer?.id}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>שם פרטי:</mat-label>
+                <input matInput value="{{customer?.firstName}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>שם משפחה:</mat-label>
+                <input matInput value="{{customer?.lastName}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>פלאפון 1:</mat-label>
+                <input matInput value="{{customer?.phon1}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>פלאפון 2:</mat-label>
+                <input matInput value="{{customer?.phon2}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>אימייל:</mat-label>
+                <input matInput value="{{customer?.email}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>סיסמא:</mat-label>
+                <input matInput value="{{customer?.password}}">
+            </mat-form-field>
+        </p>
+        <p>
+            <mat-form-field appearance="legacy">
+                <mat-label>סטטוס </mat-label>
+                <input matInput value="{{customer?.isActive}}">
+            </mat-form-field>
+        </p>
+
+    </form>
+</ng-container>

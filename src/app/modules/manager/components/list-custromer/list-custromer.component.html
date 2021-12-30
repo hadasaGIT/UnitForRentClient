@@ -1,0 +1,12 @@
+<mat-list role="list">
+    <mat-list-item role="listitem" *ngFor="let customer of customersList | async">
+        <div>
+            <div mat-line>{{customer.id}} | {{customer.firstName}} | {{customer.lastName}} </div>
+            <button *ngIf="!selectedCustomer" (click)="selectCustomer(customer)"> פרטים נוספים...</button>
+            <app-customer-details [customer]="selectedCustomer"></app-customer-details>
+            <button *ngIf="selectedCustomer" (click)="selectedCustomer=undefined">סגירה</button>
+            <button (click)="deleteCustomer(customer?.id)">מחיקה</button>
+        </div>
+        <mat-divider></mat-divider>
+    </mat-list-item>
+</mat-list>

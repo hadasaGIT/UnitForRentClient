@@ -1,0 +1,13 @@
+<p>housing-unit-list works!</p>
+
+<input
+  type="checkbox"
+  #chb
+  (change)="filterHousingUnitByRelevant(chb.checked)"
+/>
+הצג רק מודעות פעילות
+<mat-action-list *ngFor="let HousingUnit of housingUnitList">
+  <button mat-list-item (click)="save()">
+    {{ HousingUnit.id }}
+  </button>
+</mat-action-list>

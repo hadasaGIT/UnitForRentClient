@@ -1,0 +1,347 @@
+<mat-sidenav-container style="height: calc(100vh - 20px)">
+  <mat-card style="max-width: 50%">
+    <mat-card-content>
+      <form
+        [formGroup]="formSearch"
+        class="form-inline pt-5"
+        style="width: 100%"
+      >
+        <!--<p class="main-title text-center">חיפוש יחידה להשכרה</p>-->
+        <div class="d-flex justify-content-between">
+          <!--עיר-->
+          <div class="form-group" style="width: 49%">
+            <label for="City"><b>כתובת</b></label>
+            <input
+              type="text"
+              class="form-control mx-1 my-1"
+              id="City"
+              placeholder="להזנת עיר, רחוב או שכונה"
+              formControlName="City"
+            />
+          </div>
+          <!--חדרים-->
+          <div class="form-group" style="width: 49%">
+            <label for="MinRoomsNum"><b>חדרים</b></label>
+            <div class="input-group d-flex justify-content-between">
+              <input
+                type="number"
+                class="form-control mx-1 my-1"
+                id="MinRoomsNum"
+                placeholder="מ-"
+                formControlName="MinRoomsNum"
+              />
+              <input
+                type="number"
+                class="form-control my-1"
+                id="MaxRoomsNum"
+                placeholder="עד-"
+                formControlName="MaxRoomsNum"
+              />
+            </div>
+          </div>
+          <!--**-->
+          <!--**-->
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <!--מחיר-->
+          <div class="form-group" style="width: 49%">
+            <label for="FromArea"><b>דמי שכירות חודשיים</b></label>
+            <div class="input-group d-flex justify-content-between">
+              <input
+                no-wheel="false"
+                type="number"
+                class="form-control mx-1 my-1"
+                id="MinPrice"
+                placeholder="ממחיר"
+                formControlName="MinPrice"
+              />
+              <input
+                type="number"
+                class="form-control my-1"
+                id="MaxPrice"
+                placeholder="עד מחיר"
+                formControlName="MaxPrice"
+              />
+            </div>
+          </div>
+
+          <div
+            class="d-flex justify-content-between"
+            style="width: 49%; padding-top: 2%"
+          >
+            <!--מצב הנכס-->
+            <mat-form-field appearance="fill" style="width: 48%">
+              <mat-label>מצב הנכס</mat-label>
+              <mat-select formControlName="PropertyCondition">
+                <mat-option
+                  *ngFor="let p of listPropertyConditions"
+                  [value]="p.id"
+                >
+                  {{ p.condition }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!--כפתור פילטר לפרמטרים נוספים-->
+            <div
+              [ngClass]="{ open: open, close: !open }"
+              (click)="openFilter()"
+            >
+              <div [ngClass]="{ openImg: open, closeImg: !open }"></div>
+            </div>
+            <!--כפתור חיפוש-->
+            <button
+              [disabled]="!formSearch.valid"
+              (click)="search()"
+              class="btn-search btn"
+            >
+              חיפוש
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="open" class="filters">
+          <div class="d-flex justify-content-between">
+            <!--קומה-->
+            <div class="form-group mx-2">
+              <label for="FromFloor"><b>קומה</b></label>
+              <div class="input-group d-flex justify-content-between">
+                <input
+                  type="number"
+                  class="form-control mx-1 my-1"
+                  id="FromFloor"
+                  placeholder="מ-"
+                  formControlName="FromFloor"
+                />
+                <input
+                  type="number"
+                  class="form-control my-1"
+                  id="ToFloor"
+                  placeholder="עד-"
+                  formControlName="ToFloor"
+                />
+              </div>
+            </div>
+            <!--**-->
+
+            <!--שטח-->
+            <div class="form-group">
+              <label for="FromArea"><b>שטח</b></label>
+              <div class="input-group d-flex justify-content-between">
+                <input
+                  type="number"
+                  class="form-control mx-1 my-1"
+                  id="FromArea"
+                  placeholder="מ-"
+                  formControlName="FromArea"
+                />
+                <input
+                  type="number"
+                  class="form-control my-1"
+                  id="ToArea"
+                  placeholder="עד-"
+                  formControlName="ToArea"
+                />
+              </div>
+            </div>
+          </div>
+          <label for="Extras"><b>תוספות</b></label>
+          <!--checkboxes-->
+          <div class="checkboxes" id="Extras">
+            <!--חנייה-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="parking"
+              autocomplete="off"
+              formControlName="Parking"
+            />
+            <label class="btn btn-outline-primary m-1" for="parking"
+              >חנייה<mat-icon> local_parking</mat-icon></label
+            >
+            <!--ממ"ד-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="securityRoom"
+              autocomplete="off"
+              formControlName="SecurityRoom"
+            />
+            <label class="btn btn-outline-primary m-1" for="securityRoom"
+              >ממ"ד<mat-icon>security</mat-icon></label
+            >
+            <!--גישה לנכים-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="accessForDisabled"
+              autocomplete="off"
+              formControlName="AccessForDisabled"
+            />
+            <label class="btn btn-outline-primary m-1" for="accessForDisabled"
+              >גישה לנכים<mat-icon>accessible</mat-icon></label
+            >
+            <!--מעלית-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="elevator"
+              autocomplete="off"
+              formControlName="Elevator"
+            />
+            <label class="btn btn-outline-primary m-1" for="elevator"
+              >מעלית<span class="material-icons">elevator</span></label
+            >
+            <!--מרפסת-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="terrace"
+              autocomplete="off"
+              formControlName="Terrace"
+            />
+            <label class="btn btn-outline-primary m-1" for="terrace"
+              >מרפסת<span class="material-icons">balcony</span></label
+            >
+            <!--דוד שמש-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="solarHeater"
+              autocomplete="off"
+              formControlName="SolarHeater"
+            />
+            <label class="btn btn-outline-primary m-1" for="solarHeater"
+              >דוד שמש<mat-icon>wb_sunny</mat-icon></label
+            >
+            <!--מיזוג אוויר-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="airConditioning"
+              autocomplete="off"
+              formControlName="AirConditioning"
+            />
+            <label class="btn btn-outline-primary m-1" for="airConditioning"
+              >מיזוג אוויר<mat-icon>ac_unit</mat-icon></label
+            >
+            <!--דלתות פנדור-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="pandorDoors"
+              autocomplete="off"
+              formControlName="PandorDoors"
+            />
+            <label class="btn btn-outline-primary m-1" for="pandorDoors"
+              >דלתות פנדור<span class="material-icons">sensor_door</span></label
+            >
+            <!--בעלי חיים-->
+            <input
+              mdbCheckbox
+              type="checkbox"
+              class="btn-check"
+              id="animal"
+              autocomplete="off"
+              formControlName="Animal"
+            />
+            <label class="btn btn-outline-primary m-1" for="animal"
+              >בע"ח<span class="material-icons">child_care</span></label
+            >
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!--הצגת יחידות דיור תואמות לפרמטרי החיפוש-->
+  <mat-accordion>
+    <mat-expansion-panel
+      *ngFor="let HousingUnit of listHousingUnit"
+      (opened)="panelOpenState = true"
+      (closed)="panelOpenState = false"
+    >
+      <mat-expansion-panel-header>
+        <div
+          class="card-housing-unit d-flex justify-content-between"
+          style="width: 95%"
+        >
+          <div class="p-2 w-100 bd-highlight">
+            <div class="d-flex flex-column">
+              <div class="d-flex justify-content-between" style="width: 95%">
+                <div class="">
+                  <h3>יחידת דיור</h3>
+                  <h2>{{ HousingUnit.city }}</h2>
+                </div>
+                <div>
+                  <h1 class="pt-4">{{ HousingUnit.price }} ₪</h1>
+                </div>
+              </div>
+              <div class="card-header">
+                <span class="text-bottom">{{ HousingUnit.area }} מ"ר</span>
+                <span class="text-bottom"
+                  >{{ HousingUnit.roomsNum }} חדרים</span
+                >
+                <span class="text-bottom">קומה {{ HousingUnit.floor }}</span>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="addFavorite(HousingUnit.id)"
+                >
+                  <mat-icon *ngIf="isFavorite(HousingUnit.id)"
+                    >favorite</mat-icon
+                  >
+                  <mat-icon *ngIf="!isFavorite(HousingUnit.id)"
+                    >favorite_border</mat-icon
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+          <!--<div class="flex-shrink-1 bd-highlight">
+            <img
+              *ngIf="mapHousingUnitImage.get(HousingUnit)"
+              class="rounded float-start"
+              [src]="mapHousingUnitImage.get(HousingUnit)"
+            />
+          </div>-->
+        </div>
+
+        <!--  <div class="">
+        <img src="../../../../../assets/icons/cat.jpg"/>
+        </div>
+        <mat-panel-title> <div class="bg-success p-2 text-dark bg-opacity-25">
+            {{ HousingUnit.city }}
+          </div></mat-panel-title>
+        <mat-panel-description>
+          <div class="bg-success p-2 text-dark bg-opacity-25">
+            {{ HousingUnit.price }} ₪
+          </div>
+        </mat-panel-description>-->
+      </mat-expansion-panel-header>
+
+      <p>{{ HousingUnit.description }}</p>
+    </mat-expansion-panel>
+  </mat-accordion>
+</mat-sidenav-container>
+<!--
+<input
+  ngx-google-places-autocomplete
+  #placesRef="ngx-places"
+  (onAddressChange)="handleDestinationChange($event)"
+  placeholder="Address to"
+/>
+
+<agm-map [latitude]="lat" [longitude]="lng">
+  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+</agm-map>-->

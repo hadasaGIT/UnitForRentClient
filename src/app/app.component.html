@@ -1,0 +1,104 @@
+<mat-toolbar
+  color="white"
+  border="2"
+  style="
+    height: auto;
+    border-bottom: 0.7px solid #a59393;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  "
+>
+  <a class="navbar-brand me-2" href="#">
+    <img
+      src="../assets/img/LOGOֹֹ2.png"
+      alt=""
+      width="150px"
+      height="100px"
+      loading="lazy"
+      style="margin-top: -1px"
+    />
+  </a>
+
+  <span class="example-spacer"></span>
+  <div fxShow="true" fxHide.lt-md="true">
+    <div>
+      <button mat-button routerLink="/login" class="me-3">
+        <mat-icon>power_settings_new</mat-icon>
+        התחברות
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        routerLink="/customer/publish"
+        class="me-4"
+      >
+        פרסום מודעה
+      </button>
+      <button
+        mat-raised-button
+        color="warn"
+        routerLink="/customer"
+        class="me-4"
+      >
+        אזור אישי
+      </button>
+    </div>
+    <!--<button mat-button>
+      <mat-icon>exit_to_app</mat-icon>
+      Logout
+    </button>
+    <a routerLink="/login" mat-stroked-button mat-warn>התחברות</a>-->
+  </div>
+
+  <div fxShow="true" fxHide.gt-sm="true">
+    <a href="#" (click)="sidenav.toggle()">Show Side Menu</a>
+  </div>
+</mat-toolbar>
+
+<mat-sidenav-container fxFlexFill class="example-container">
+  <mat-sidenav #sidenav fxLayout="column">
+    <div fxLayout="column">
+      <a (click)="sidenav.toggle()" href="#" mat-button>Close</a>
+      <a href="#" mat-button>Menu Item 1</a>
+      <a href="#" mat-button>Menu Item 2</a>
+      <a href="#" mat-button>Menu Item 3</a>
+      <a href="#" mat-button>Menu Item 4</a>
+      <a href="#" mat-button>Menu Item 5</a>
+      <a href="#" mat-button>Menu Item 6</a>
+    </div>
+  </mat-sidenav>
+  <!--<mat-sidenav-content fxFlexFill>Main content</mat-sidenav-content>-->
+</mat-sidenav-container>
+
+<!-- Navbar 
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <! Container wrapper 
+  <div class="container">-->
+<!-- Navbar brand 
+    <a class="navbar-brand me-2" href="#">
+      <img
+        src="../assets/img/LOGOֹֹ2.png"
+        alt=""
+        width="130"
+        height="130"
+        loading="lazy"
+        style="margin-top: -1px"
+      />
+    </a>-->
+<!--<div class="d-flex align-items-center">
+      <a
+        routerLink="/login"
+        class="btn btn-secondary btn-lg active"
+        role="button"
+        aria-pressed="true"
+      >
+        התחברות
+      </a>
+    </div>
+  </div>-->
+<!-- Collapsible wrapper 
+</nav>-->
+<!-- Navbar -->
+
+<router-outlet></router-outlet>

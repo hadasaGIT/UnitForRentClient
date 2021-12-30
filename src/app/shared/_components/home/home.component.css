@@ -1,0 +1,23 @@
+.main-title {
+  font-size: 70px;
+  line-height: 91px;
+  letter-spacing: -1.05px;
+  font-weight: bold;
+  color: rgb(40, 49, 73);
+  font-family: Assistant;
+  /* font-family: 'Segoe UI'; */
+  margin-top: 262px;
+  text-align: center;
+}
+
+.input-border-m {
+  border-radius: 4px;
+  padding: 0px 15px 0px 11px;
+  /* border-width: 6px; */
+  border-style: outset;
+  border-color: rgb(228, 228, 228);
+}
+mat-sidenav-container {
+  background-image: url(../../../../assets/img/home_img_2.png);
+  background-repeat: round;
+}
