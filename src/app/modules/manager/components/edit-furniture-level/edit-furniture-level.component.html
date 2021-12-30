@@ -1,1 +1,21 @@
-<p>edit-furniture-level works!</p>
+<mat-list>
+    <a (click)="openNewListItem()">
+        <h1>+</h1>
+    </a>
+
+    <mat-list-item *ngIf="newFurnitureLevel">
+        <mat-icon (click)="newFurnitureLevel=undefined">close</mat-icon>
+        <mat-form-field appearance="legacy">
+            <input matInput placeholder="new condition" #newCondition>
+        </mat-form-field>
+        <button (click)="addFurnitureLevel(newCondition.value)">save</button>
+    </mat-list-item>
+
+    <mat-list-item *ngFor="let level of furnitureLevelsList|async">
+        <mat-icon (click)="deleteFurnitureLevel(level.id)">delete</mat-icon>
+        <mat-form-field appearance="legacy">
+            <input matInput value="{{level.level}}" #input>
+        </mat-form-field>
+        <button (click)="saveChanges(level, input.value)">save</button>
+    </mat-list-item>
+</mat-list>

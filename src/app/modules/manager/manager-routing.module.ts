@@ -9,7 +9,7 @@ const MANAGER_ROUTES: Route[] = [
   { path: '', redirectTo: 'main-manager', pathMatch: 'full' },
   { path: 'main-manager', component: MainManagerComponent },
   {path: 'list-customer', component: ListCustromerComponent },
-  {path: 'property-condition', component: EditPropertyConditionComponent },
+  {path: 'property-conditions', component: EditPropertyConditionComponent },
   {path: 'furniture-levels', component: EditFurnitureLevelComponent },
 ];
 
