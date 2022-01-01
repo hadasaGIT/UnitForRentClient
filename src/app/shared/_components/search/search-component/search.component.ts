@@ -2,9 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HousingUnitRelevant } from 'src/app/modules/customer/models/housing-unit-relevant.model';
+import { customerService } from 'src/app/modules/customer/services/customer.service';
 import { HousingUnitRelevantService } from 'src/app/modules/customer/services/housing-unit-relevant.service';
+import { FurnitureLevel } from 'src/app/shared/_models/furniture-level.models';
 import { HousingUnitFull } from 'src/app/shared/_models/housing-unit-full.model';
-import { PropertyCondition } from 'src/app/shared/_models/propery-condition.model';
+import { PropertyCondition } from 'src/app/shared/_models/property-condition.model';
+import { FurnitureLevelService } from 'src/app/shared/_services/furniture-level.service';
 import { HousingUnitFullService } from 'src/app/shared/_services/housing-unit-full.service';
 import { HousingUnitImageService } from 'src/app/shared/_services/housing-unit-image.service';
 import { PropertyConditionService } from 'src/app/shared/_services/property-condition.service';
@@ -24,7 +27,9 @@ export class SearchComponent implements OnInit {
   listHousingUnit: HousingUnit[];
   panelOpenState = false;
   listPropertyConditions: PropertyCondition[];
+  listFurnitureLevel: FurnitureLevel[];
   open: boolean = false;
+  valueDescription = '';
   // mapHousingUnitImage: Map<HousingUnit, string> = new Map<
   //   HousingUnit,
   //   string
@@ -38,9 +43,11 @@ export class SearchComponent implements OnInit {
     private route: ActivatedRoute,
     private _service: SearchService,
     private _serviceHousingUnitImage: HousingUnitImageService,
+    private _serviceCustomer: customerService,
     private _serviceHousingUnitRelevant: HousingUnitRelevantService,
     private _serviceHousingUnitFull: HousingUnitFullService,
-    private _servicePropertyCondition: PropertyConditionService
+    private _servicePropertyCondition: PropertyConditionService,
+    private _serviceFurnitureLevel: FurnitureLevelService
   ) {}
 
   ngOnInit() {
@@ -49,20 +56,27 @@ export class SearchComponent implements OnInit {
     this.initForm(new Search());
     this.search();
     this.getPropertyCondition();
+    this.getFurnitureLevel();
   }
   getPropertyCondition() {
     this._servicePropertyCondition
       .getAllPropertyConditions()
       .subscribe((res) => {
-        console.log(res);
         this.listPropertyConditions = res;
       });
   }
+  getFurnitureLevel() {
+    this._serviceFurnitureLevel.getAllFurnitureLevels().subscribe((res) => {
+      this.listFurnitureLevel = res;
+    });
+  }
   search() {
     this.searchParams = this.formSearch.value;
+    this.searchParams.CustomersId=this._serviceCustomer.customerId
     console.log(this.searchParams);
     this._service.search(this.searchParams).subscribe((res) => {
       this.listHousingUnit = res;
+      console.log(this.listHousingUnit);
       this._serviceHousingUnitFull.GetHousingUnitFull(res);
       // this.listHousingUnit.forEach((element) => {
       //   this._serviceHousingUnitImage
@@ -91,6 +105,7 @@ export class SearchComponent implements OnInit {
       PropertyCondition: new FormControl(search.PropertyCondition),
       Furniture: new FormControl(search.Furniture),
       DateSearch: new FormControl(search.DateSearch),
+      //תאריך פינוי
       EvacuationDate: new FormControl(search.EvacuationDate),
       PublishDate: new FormControl(search.PublishDate),
       City: new FormControl(search.City || this.address),

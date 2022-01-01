@@ -21,36 +21,43 @@
   </a>
 
   <span class="example-spacer"></span>
-  <div fxShow="true" fxHide.lt-md="true">
-    <div>
-      <button mat-button routerLink="/login" class="me-3">
+  <!--<div fxShow="true" fxHide.lt-md="true">-->
+  <div class="d-flex justify-content-evenly" style="width: 40%">
+    <button class="button-6" routerLink="/login" role="button">התחברות</button>
+    <!-- <button mat-button routerLink="/login" class="me-3">
         <mat-icon>power_settings_new</mat-icon>
         התחברות
-      </button>
-      <button
+      </button>-->
+    <button class="button-6" routerLink="/customer/publish" role="button">
+      פרסום מודעה
+    </button>
+    <!--<button
         mat-raised-button
         color="warn"
         routerLink="/customer/publish"
         class="me-4"
       >
         פרסום מודעה
-      </button>
-      <button
+      </button>-->
+    <button class="button-6" routerLink="/customer" role="button">
+      אזור אישי
+    </button>
+    <!-- <button
         mat-raised-button
         color="warn"
         routerLink="/customer"
         class="me-4"
       >
         אזור אישי
-      </button>
-    </div>
+      </button>-->
+  </div>
 
-    <!--<button mat-button>
+  <!--<button mat-button>
       <mat-icon>exit_to_app</mat-icon>
       Logout
     </button>
     <a routerLink="/login" mat-stroked-button mat-warn>התחברות</a>-->
-  </div>
+  <!--</div>-->
 
   <div fxShow="true" fxHide.gt-sm="true">
     <a href="#" (click)="sidenav.toggle()">Show Side Menu</a>

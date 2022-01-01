@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExecComponent } from './exec.component';
+import { EditFurnitureLevelComponent } from './edit-furniture-level.component';
 
-describe('ExecComponent', () => {
-  let component: ExecComponent;
-  let fixture: ComponentFixture<ExecComponent>;
+describe('EditFurnitureLevelComponent', () => {
+  let component: EditFurnitureLevelComponent;
+  let fixture: ComponentFixture<EditFurnitureLevelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ExecComponent ]
+      declarations: [ EditFurnitureLevelComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ExecComponent);
+    fixture = TestBed.createComponent(EditFurnitureLevelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

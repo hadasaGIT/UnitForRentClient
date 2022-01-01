@@ -1,13 +1,22 @@
 body {
   direction: rtl;
+  font-family: system-ui,
+    -apple-system,
+    system-ui,
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
 }
+
 .mat-form-field {
   text-align: right;
 }
+
 /* :host { */
-  /* display: flex; */
-  /* flex-direction: column; */
-  /* align-items: flex-start; */
+/* display: flex; */
+/* flex-direction: column; */
+/* align-items: flex-start; */
 /* } */
 mat-card {
   max-width: 400px;
@@ -18,6 +27,7 @@ mat-card {
 mat-form-field {
   display: block;
 }
+
 mat-sidenav-container {
   background-image: url(../../../../../assets/img/login_img.png);
   background-repeat: round;

@@ -87,7 +87,7 @@
             <mat-select formControlName="furniture">
               <mat-option
                 *ngFor="let level of listFurnitureLevel"
-                value="{{ level.id }}"
+                [value]="level.id"
               >
                 {{ level.level }}
               </mat-option>
@@ -99,7 +99,7 @@
             <mat-select formControlName="propertyCondition">
               <mat-option
                 *ngFor="let p of listPropertyConditions"
-                value="{{ p.id }}"
+                [value]="p.id"
               >
                 {{ p.condition }}
               </mat-option>

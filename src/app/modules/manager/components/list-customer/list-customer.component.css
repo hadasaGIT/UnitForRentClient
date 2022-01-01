@@ -1,0 +1,11 @@
+table {
+    width: 100%;
+}
+
+#wrapper{
+    width: 98%;
+    margin: auto;
+}
+.mat-elevation-z8{
+    padding: 8px;
+}

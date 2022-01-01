@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PropertyCondition } from '../_models/propery-condition.model';
+import { PropertyCondition } from '../_models/property-condition.model';
 
 @Injectable()
 export class PropertyConditionService {
@@ -12,6 +12,15 @@ export class PropertyConditionService {
   }
   AddPropertyCondition(p: PropertyCondition) {
     return this._http.post<void>('/api/PropertyCondition', p);
+  }
+  deletePropertyCondition(id: number): Observable<boolean> {
+    return this._http.delete<boolean>('/api/PropertyCondition/' + id);
+  }
+  updatePropertyCondition(pc: PropertyCondition): Observable<boolean> {
+    return this._http.put<boolean>(
+      '/api/PropertyCondition/UpdatePropertyCondition',
+      pc
+    );
   }
   constructor(private _http: HttpClient) {}
 }

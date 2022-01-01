@@ -1,0 +1,150 @@
+<mat-sidenav-container style="height: calc(100vh - 20px)">
+  <mat-card style="max-width: 50%; padding: 0" *ngIf="currentHousingUnit">
+    <mat-card-content class="container">
+      <div class="mySlides active">
+        <div class="numbertext"></div>
+        <img [src]="imageToShow" style="width: 100%; height: 50vh" />
+      </div>
+
+      <!-- Next and previous buttons -->
+      <a class="prev" (click)="prev()"><mat-icon>navigate_before</mat-icon> </a>
+      <a class="next" (click)="next()"><mat-icon>navigate_next</mat-icon> </a>
+
+      <!-- Thumbnail images -->
+      <div class="flex-container">
+        <div class="flex-item" *ngFor="let image of imageArray">
+          <img
+            class="demo cursor"
+            [src]="image"
+            style="width: 100%; height: 11vh"
+            (click)="currentSlide(1)"
+          />
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <!--housing unit details -->
+  <mat-card style="max-width: 80%">
+    <mat-card-content>
+      <div class="p-2 w-100 bd-highlight">
+        <h3>יחידה להשכרה</h3>
+
+        <div class="d-flex justify-content-between" style="width: 95%">
+          <div>
+            <h1 class="m-0">{{ currentHousingUnit.city }}</h1>
+            <h3>{{ currentHousingUnit.city }}</h3>
+          </div>
+          <div>
+            <h1 class="m-0">
+              {{ currentHousingUnit.price | number: "1.0-2" }} ₪
+              <span style="font-size: 17px; color: #645757">לחודש</span>
+            </h1>
+            <h3>{{ currentHousingUnit.publishDate | date: "shortDate" }}</h3>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between" style="width: 95%">
+          <div style="width: 50%">
+            <div class="card-header">
+              <span class="text-bottom">{{ currentHousingUnit.area }} מ"ר</span>
+              <span class="text-bottom"
+                >{{ currentHousingUnit.roomsNum }} חדרים</span
+              >
+              <span class="text-bottom"
+                >קומה {{ currentHousingUnit.floor }}</span
+              >
+            </div>
+            <p class="p-3">
+              {{ currentHousingUnit.description }}+1 עם רישיון לבניה של עד 40
+              מ"ר על הגג. 3 שרותים , חניה מקורה רשומה בטאבו. הדירה שקטה מאד עם
+              נוף מהמם ו-4 כיווני אוויר. הבניין שופץ פנימית וחיצונית לפני
+              כשנתיים. פינוי ארוך. ללא דמי תיווך
+            </p>
+            <mat-list>
+              <mat-list-item class="divider">Item 1</mat-list-item>
+              <mat-list-item class="divider">
+                <p>מ"ר בנוי</p>
+                <p>
+                  <b>{{ currentHousingUnit.area }}</b>
+                </p>
+              </mat-list-item>
+              <mat-list-item class="divider">Item 3</mat-list-item>
+            </mat-list>
+            <div class="checkboxes" id="Extras">
+              <!--חנייה-->
+              <span class="m-1">חנייה<mat-icon> local_parking</mat-icon></span>
+              <!--ממ"ד-->
+              <span class="m-1">ממ"ד<mat-icon>security</mat-icon></span>
+              <!--גישה לנכים-->
+              <span class="m-1">גישה לנכים<mat-icon>accessible</mat-icon></span>
+              <!--מעלית-->
+              <span class="m-1"
+                >מעלית<span class="material-icons">elevator</span></span
+              >
+              <!--מרפסת-->
+              <span class="m-1"
+                >מרפסת<span class="material-icons">balcony</span></span
+              >
+              <!--דוד שמש-->
+              <span class="m-1">דוד שמש<mat-icon>wb_sunny</mat-icon></span>
+              <!--מיזוג אוויר-->
+              <span class="m-1">מיזוג אוויר<mat-icon>ac_unit</mat-icon></span>
+              <!--דלתות פנדור-->
+              <span class="m-1"
+                >דלתות פנדור<span class="material-icons"
+                  >sensor_door</span
+                ></span
+              >
+              <!--בעלי חיים-->
+              <span class="m-1"
+                >בע"ח<span class="material-icons">child_care</span></span
+              >
+            </div>
+          </div>
+
+          <mat-card
+            style="width: 30%; height: 17em; text-align: center"
+            *ngIf="unitOwner"
+          >
+            <p class="fs-5" style="color: gray">מפרסם/ת המודעה</p>
+            <p class="fs-5">
+              <b>{{ unitOwner.firstName }}</b>
+            </p>
+            <button
+              class="button-68 mt-3"
+              role="button"
+              (click)="isActive()"
+              [ngClass]="{ hide: hide }"
+            >
+              <span><mat-icon> phone</mat-icon></span> הצגת מספר טלפון
+            </button>
+
+            <div *ngIf="hide" class="pt-3">
+              <p class="fs-5">
+                <span><mat-icon> stay_current_portrait</mat-icon></span>
+                {{ unitOwner.phon1 }}
+              </p>
+              <p class="fs-5 pt-2" *ngIf="unitOwner.phon2">
+                <span><mat-icon> stay_current_portrait</mat-icon></span>
+                {{ unitOwner.phon2 }}
+              </p>
+              <p>
+                <a [href]="emailUnitOwner" role="button">
+                  שליחת דוא"ל למפרסם
+                </a>
+              </p>
+
+              <p>
+                <a [href]="phonNumber" target="_blank" role="button">
+                  שליחת הודעה למפרסם
+                </a>
+              </p>
+            </div>
+
+            <!--    <p><a [href]="emailUnitOwner">Send email</a></p>
+            <a [href]="phonNumber" target="_blank">Link Text Here</a>-->
+          </mat-card>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</mat-sidenav-container>

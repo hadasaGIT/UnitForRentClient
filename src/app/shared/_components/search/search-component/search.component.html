@@ -1,5 +1,5 @@
 <mat-sidenav-container style="height: calc(100vh - 20px)">
-  <mat-card style="max-width: 50%">
+  <mat-card style="max-width: 50%; background-color: #f9fcff">
     <mat-card-content>
       <form
         [formGroup]="formSearch"
@@ -71,14 +71,14 @@
             style="width: 49%; padding-top: 2%"
           >
             <!--מצב הנכס-->
-            <mat-form-field appearance="fill" style="width: 48%">
+            <mat-form-field appearance="legacy">
               <mat-label>מצב הנכס</mat-label>
               <mat-select formControlName="PropertyCondition">
                 <mat-option
                   *ngFor="let p of listPropertyConditions"
                   [value]="p.id"
                 >
-                  {{ p.condition }}
+                  {{ p.condition }}+
                 </mat-option>
               </mat-select>
             </mat-form-field>
@@ -101,6 +101,7 @@
           </div>
         </div>
 
+        <!--פרמטרים נוספים-->
         <div *ngIf="open" class="filters">
           <div class="d-flex justify-content-between">
             <!--קומה-->
@@ -257,6 +258,56 @@
             <label class="btn btn-outline-primary m-1" for="animal"
               >בע"ח<span class="material-icons">child_care</span></label
             >
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="form-group">
+              <!--רמת ריהוט-->
+              <mat-form-field appearance="legacy" style="margin-left: 2%">
+                <mat-label>רמת ריהוט</mat-label>
+                <mat-select formControlName="Furniture">
+                  <mat-option
+                    *ngFor="let level of listFurnitureLevel"
+                    [value]="level.id"
+                  >
+                    {{ level.level }} +
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <!--תאריך כניסה-->
+              <mat-form-field appearance="legacy">
+                <mat-label>תאריך כניסה ליחידה</mat-label>
+                <input
+                  matInput
+                  [matDatepicker]="picker"
+                  formControlName="EvacuationDate"
+                  placeholder="בחר תאריך או סמן כניסה מיידית"
+                />
+                <mat-datepicker-toggle
+                  matSuffix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <!--חיפוש חופשי-->
+            <mat-form-field appearance="legacy">
+              <mat-label>חיפוש חופשי</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="valueDescription"
+                formControlName="Description"
+              />
+              <button
+                *ngIf="valueDescription"
+                matSuffix
+                mat-icon-button
+                aria-label="Clear"
+                (click)="valueDescription = ''"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-form-field>
           </div>
         </div>
       </form>

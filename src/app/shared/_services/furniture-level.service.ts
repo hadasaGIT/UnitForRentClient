@@ -10,6 +10,18 @@ export class FurnitureLevelService {
       '/api/furnitureLevel/GetAllfurnitureLevels'
     );
   }
+  addFurnitureLevel(f: FurnitureLevel) {
+    return this._http.post<void>('/api/FurnitureLevel', f);
+  }
+  updateFurnitureLevel(f: FurnitureLevel): Observable<boolean> {
+    return this._http.put<boolean>(
+      '/api/FurnitureLevel/UpdateFurnitureLevel/' + f.id,
+      f
+    );
+  }
+  deleteFurnitureLevel(id: number): Observable<boolean> {
+    return this._http.delete<boolean>('/api/FurnitureLevel/' + id);
+  }
 
   constructor(private _http: HttpClient) {}
 }

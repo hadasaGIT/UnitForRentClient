@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FurnitureLevel } from 'src/app/shared/_models/furniture-level.models';
 import { HousingUnit } from 'src/app/shared/_models/housing-unit.model';
-import { PropertyCondition } from 'src/app/shared/_models/propery-condition.model';
+import { PropertyCondition } from 'src/app/shared/_models/property-condition.model';
 import { FurnitureLevelService } from 'src/app/shared/_services/furniture-level.service';
 import { HousingUnitService } from 'src/app/shared/_services/housing-unit.service';
 import { PropertyConditionService } from 'src/app/shared/_services/property-condition.service';
@@ -154,8 +154,7 @@ export class PublishHousingUnitComponent implements OnInit {
     reader.onload = () => {
       console.log(reader.result);
       this.base64 = reader.result;
-      if (this.base64) 
-        this.images[this.loop++] = this.base64.toString();
+      if (this.base64) this.images[this.loop++] = this.base64.toString();
     };
   }
 }

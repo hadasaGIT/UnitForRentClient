@@ -1,19 +1,29 @@
 body {
   direction: rtl;
+  font-family: system-ui,
+    -apple-system,
+    system-ui,
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
 }
+
 mat-card {
   max-width: 400px;
   margin: 2em auto;
   text-align: center;
 }
+
 .mat-form-field {
   text-align: right;
 }
+
 mat-form-field {
   display: block;
 }
 
 mat-sidenav-container {
   background-image: url(../../../../../assets/img/login_img.png);
-background-repeat: round; 
+  background-repeat: round;
 }

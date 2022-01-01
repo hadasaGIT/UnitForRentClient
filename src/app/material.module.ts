@@ -100,6 +100,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatInputModule,
     MatButtonModule,
     MatAutocompleteModule,
+    MatPaginatorModule,
     // MatStepperNext,
     // MatStepper,
   ],
