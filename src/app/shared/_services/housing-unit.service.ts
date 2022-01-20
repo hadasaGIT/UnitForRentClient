@@ -11,12 +11,12 @@ export class HousingUnitService {
   GetHousingUnitByRelevantAndCustomerId(
     customerId: number
   ): Observable<HousingUnit[]> {
-    console.log(customerId);
     return this._http.get<HousingUnit[]>(
       '/api/HousingUnit/GetHousingUnitByRelevantAndCustomerId/' + customerId
     );
   }
   GetHousingUnitByCustomerId(customerId: number): Observable<HousingUnit[]> {
+    console.log(customerId);
     return this._http.get<HousingUnit[]>(
       '/api/HousingUnit/GetHousingUnitByCustomerId/' + customerId
     );
@@ -26,8 +26,21 @@ export class HousingUnitService {
       '/api/HousingUnit/GetHousingUnitById/' + id
     );
   }
-  AddHousingUnit(h: HousingUnit) {
-    return this._http.post<void>('/api/HousingUnit', h);
+  AddHousingUnit(h: HousingUnit): Observable<number> {
+    return this._http.post<number>('/api/HousingUnit', h);
+  }
+  UpdateHousingUnit(
+    housingUnitToUpdate: HousingUnit,
+    housingUnitId: number
+  ): Observable<boolean> {
+    console.log(housingUnitToUpdate);
+    return this._http.put<boolean>(
+      '/api/HousingUnit/UpdateHousingUnit/' + housingUnitId,
+      housingUnitToUpdate
+    );
+  }
+  deleteHousingUnit(id: number): Observable<boolean> {
+    return this._http.delete<boolean>('/api/HousingUnit/' + id);
   }
   constructor(private _http: HttpClient) {}
 }

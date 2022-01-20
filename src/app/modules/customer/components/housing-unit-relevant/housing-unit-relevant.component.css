@@ -1,0 +1,30 @@
+body {
+  font-family: system-ui,
+    -apple-system,
+    system-ui,
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+
+}
+
+.main-title {
+  font-size: 5vw;
+  line-height: 2em;
+  font-weight: bold;
+  color: rgb(40, 49, 73);
+  font-family: system-ui,
+    -apple-system,
+    system-ui,
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+  margin-top: 1vw;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+}

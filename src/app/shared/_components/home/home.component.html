@@ -1,15 +1,16 @@
 <mat-sidenav-container style="height: calc(100vh - 20px)">
-<p class="main-title text-center"> למה לחפש אם אפשר למצוא?</p>
-<form [formGroup]="formSearch" (ngSubmit)="search()">
-  <div class="text-center d-flex justify-content-center">
-    <input
-      style="width: 40%"
-      class="input-border-m form-control form-control-lg"
-      type="text"
-      placeholder="להזנת עיר, רחוב או שכונה"
-      formControlName="address"
-    />
-    <button type="submit" class="btn btn-danger">חיפוש</button>
-  </div>
-</form>
+  <p class="main-title text-center">למה לחפש אם אפשר למצוא?</p>
+  <form [formGroup]="formSearch" (ngSubmit)="search()">
+    <div class="text-center d-flex justify-content-center">
+      <input
+        #mapSearchField
+        style="width: 40%"
+        class="input-border-m form-control form-control-lg"
+        type="text"
+        placeholder="להזנת עיר, רחוב או שכונה"
+        formControlName="address"
+      />
+      <button type="submit" class="btn btn-danger">חיפוש</button>
+    </div>
+  </form>
 </mat-sidenav-container>

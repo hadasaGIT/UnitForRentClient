@@ -11,8 +11,11 @@ import { RegisterModule } from './shared/_components/register/register.module';
 import { SharedModule } from './shared/shared.module';
 import { CustomerModule } from './modules/customer/customer.module';
 import { ManagerModule } from './modules/manager/manager.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { PageNotFoundComponent } from './shared/_components/page-not-found/page-not-found.component';
+
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PageNotFoundComponent],
   imports: [
     MaterialModule,
     BrowserModule,
@@ -25,6 +28,7 @@ import { ManagerModule } from './modules/manager/manager.module';
     RegisterModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

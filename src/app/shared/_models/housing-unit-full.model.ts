@@ -1,14 +1,6 @@
 import { HousingUnit } from './housing-unit.model';
-
 export class HousingUnitFull {
+  images: string[];
   housingUnit: HousingUnit;
-  image: string[] = [];
-  favorite: boolean;
-  constructor(housingUnit?: HousingUnit, image?: string, favorite?: boolean) {
-    if (housingUnit && image && favorite) {
-      this.image.push(image);
-      this.housingUnit = housingUnit;
-      this.favorite = favorite;
-    }
-  }
+  isFavorite: boolean;
 }

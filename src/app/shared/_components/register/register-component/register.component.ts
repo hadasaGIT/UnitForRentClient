@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { validateBasis } from '@angular/flex-layout';
 import {
   FormBuilder,
   FormControl,
@@ -27,16 +28,21 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private _router: Router
   ) {}
-  //לא עובד המינימום..
   async ngOnInit() {
     this.registerForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phon1: ['', Validators.required],
-      phon2: ['', []],
-      //usernames: [this.registerForm.controls.email, []],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
+      phon1: ['', [Validators.required, Validators.pattern('[0-9]{9,10}')]],
+      phon2: ['', Validators.pattern('[0-9]{9,10}')],
       email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.required, Validators.min(8)]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(7),
+          Validators.pattern('^(?=.*[0-9])(?=.*[a-z]).{8,32}$'),
+        ],
+      ],
     });
   }
   async register() {
@@ -55,6 +61,7 @@ export class RegisterComponent implements OnInit {
           .registerCustomer(this.account)
           .subscribe((data) => {
             console.log('Register OK');
+            this._router.navigate(['../']);
           });
       } catch (err) {
         this.formSubmitAttempt = true;

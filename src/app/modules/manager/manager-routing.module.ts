@@ -8,12 +8,12 @@ import { MainManagerComponent } from './components/main-manager/main-manager.com
 const MANAGER_ROUTES: Route[] = [
   { path: '', redirectTo: 'manager/main-manager', pathMatch: 'full' },
   { path: 'manager/main-manager', component: MainManagerComponent },
-  { path: 'manager/list-customer', component: ListCustomerComponent },
+  { path: 'list-customer', component: ListCustomerComponent },
   {
-    path: 'manager/property-conditions',
+    path: 'property-conditions',
     component: EditPropertyConditionComponent,
   },
-  { path: 'manager/furniture-levels', component: EditFurnitureLevelComponent },
+  { path: 'furniture-levels', component: EditFurnitureLevelComponent },
 ];
 
 @NgModule({

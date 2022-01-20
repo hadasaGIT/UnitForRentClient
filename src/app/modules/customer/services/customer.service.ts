@@ -6,8 +6,7 @@ import { Customer2 } from '../models/customer2.model';
 
 @Injectable()
 export class customerService {
-
-  public customerId: number=this.getCustomerId();
+  public customerId: number;
 
   GetAllCustomers(): Observable<Customer[]> {
     return this._http.get<Customer[]>('/api/Customer/GetAllCustomers');
@@ -30,12 +29,16 @@ export class customerService {
       customerToUpdate
     );
   }
-  getCustomerId():number{
-        const login = localStorage.getItem('currentUser');
-        if(login){
-        return JSON.parse(login)['id'];
-      }
-      return 0;
+  getCustomerId() {
+    const login = localStorage.getItem('currentUser');
+    this.customerId=login?JSON.parse(login)['id']:0;
+  }
+  getUserType(): number {
+    const login = localStorage.getItem('currentUser');
+    if (login) {
+      return JSON.parse(login)['userType'];
+    }
+    return -1;
   }
   constructor(private _http: HttpClient) {}
 }

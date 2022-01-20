@@ -102,7 +102,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatAutocompleteModule,
     MatPaginatorModule,
     // MatStepperNext,
-    // MatStepper,
+    MatStepperModule,
   ],
 })
 export class MaterialModule {}

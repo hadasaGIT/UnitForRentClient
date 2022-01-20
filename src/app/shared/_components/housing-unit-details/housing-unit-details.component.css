@@ -1,4 +1,5 @@
-body,html {
+body,
+html {
   direction: rtl;
   font-family: system-ui,
     -apple-system,
@@ -12,11 +13,20 @@ body,html {
 mat-card {
   margin: 1em auto;
   /* text-align: center; */
+  font-family: system-ui,
+    -apple-system,
+    system-ui,
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
 }
 
 mat-icon {
   font-size: 40px;
 }
+
+
 
 span mat-icon {
   font-size: 20px;
@@ -176,6 +186,100 @@ mat-list-item p {
 .button-68:hover {
   box-shadow: rgba(39, 174, 96, .2) 0 6px 12px;
 }
-.hide{
-  display:none
+
+.hide {
+  display: none
+}
+
+.gray {
+  color: #bfbfbf;
+}
+
+.ml-1 {
+  margin-left: 10px;
+  display: inline-flex;
+  font-weight: 600;
+}
+
+.card-img {
+  width: 50%;
+  padding: 0;
+}
+
+.card-housing-unit {
+  width: 80%
+}
+
+.card-phon {
+  width: 21vw;
+  height: 17em;
+  text-align: center
+}
+
+.card-details {
+  width: 44vw
+}
+
+.card-feedback,
+.card-question {
+  min-width: 100%
+}
+
+.flex-q-f {
+  padding: 0 10%;
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-between;
+}
+
+.container-feedback {
+  width: 45%;
+}
+
+.container-question {
+  width: 50%;
+}
+
+.feedback::before {
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-left: 14px solid #cdcdcd;
+  content: " ";
+  height: 0;
+  position: absolute;
+  width: 0;
+  right: -14px;
+  top: 9px;
+}
+
+.feedback {
+  background: #cdcccc;
+  border: 1px solid #c1c1c1;
+  border-radius: 8px;
+  position: relative;
+  margin-bottom: 5%;
+  padding-right: 4%;
+}
+
+@media only screen and (max-width: 800px) {
+
+  .container-feedback,
+  .container-question,
+  .card-phon,
+  .card-details {
+    width: 88vw;
+  }
+
+  .flex-q-f {
+    display: inline;
+  }
+
+  .card-housing-unit
+    {
+    width: 100%;
+  }
+
+  .card-img {
+    width: 80vw
+  }
 }

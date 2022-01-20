@@ -1,5 +1,8 @@
 <mat-sidenav-container style="height: calc(100vh - 20px)">
-  <mat-card style="max-width: 50%; padding: 0" *ngIf="currentHousingUnit">
+  <mat-card
+    class="card-img"
+    *ngIf="currentHousingUnit && currentHousingUnit.images"
+  >
     <mat-card-content class="container">
       <div class="mySlides active">
         <div class="numbertext"></div>
@@ -12,101 +15,195 @@
 
       <!-- Thumbnail images -->
       <div class="flex-container">
-        <div class="flex-item" *ngFor="let image of imageArray">
+        <div class="flex-item" *ngFor="let image of currentHousingUnit.images">
           <img
+            [ngClass]="{ active: image == imageToShow }"
             class="demo cursor"
             [src]="image"
             style="width: 100%; height: 11vh"
-            (click)="currentSlide(1)"
+            (click)="currentSlide(image)"
           />
         </div>
       </div>
     </mat-card-content>
   </mat-card>
   <!--housing unit details -->
-  <mat-card style="max-width: 80%">
+  <mat-card
+    class="card-housing-unit"
+    *ngIf="currentHousingUnit && currentHousingUnit.housingUnit"
+  >
     <mat-card-content>
+      <button
+        style="padding-right: 4vw"
+        *ngIf="favorite"
+        mat-icon-button
+        color="warn"
+        (click)="removeFavorite()"
+      >
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button
+        style="padding-right: 4vw"
+        *ngIf="!favorite"
+        mat-icon-button
+        color="warn"
+        (click)="addFavorite()"
+      >
+        <mat-icon>favorite_border</mat-icon>
+      </button>
       <div class="p-2 w-100 bd-highlight">
         <h3>יחידה להשכרה</h3>
-
         <div class="d-flex justify-content-between" style="width: 95%">
           <div>
-            <h1 class="m-0">{{ currentHousingUnit.city }}</h1>
-            <h3>{{ currentHousingUnit.city }}</h3>
+            <h1 class="m-0">{{ currentHousingUnit.housingUnit.address }}</h1>
+            <h3>{{ currentHousingUnit.housingUnit.address }}</h3>
           </div>
           <div>
             <h1 class="m-0">
-              {{ currentHousingUnit.price | number: "1.0-2" }} ₪
+              {{ currentHousingUnit.housingUnit.price | number: "1.0-2" }} ₪
               <span style="font-size: 17px; color: #645757">לחודש</span>
             </h1>
-            <h3>{{ currentHousingUnit.publishDate | date: "shortDate" }}</h3>
+            <h3>
+              {{
+                currentHousingUnit.housingUnit.publishDate | date: "dd/MM/yyyy"
+              }}
+            </h3>
           </div>
         </div>
-        <div class="d-flex justify-content-between" style="width: 95%">
-          <div style="width: 50%">
+        <div class="flex-q-f" style="padding: 0">
+          <div class="card-details">
             <div class="card-header">
-              <span class="text-bottom">{{ currentHousingUnit.area }} מ"ר</span>
               <span class="text-bottom"
-                >{{ currentHousingUnit.roomsNum }} חדרים</span
+                >{{ currentHousingUnit.housingUnit.area }} מ"ר</span
               >
               <span class="text-bottom"
-                >קומה {{ currentHousingUnit.floor }}</span
+                >{{ currentHousingUnit.housingUnit.roomsNum }} חדרים</span
+              >
+              <span class="text-bottom"
+                >קומה {{ currentHousingUnit.housingUnit.floor }}
+                <span *ngIf="currentHousingUnit.housingUnit.floorsBuilding">
+                  מתוך {{ currentHousingUnit.housingUnit.floorsBuilding }}
+                </span></span
               >
             </div>
             <p class="p-3">
-              {{ currentHousingUnit.description }}+1 עם רישיון לבניה של עד 40
-              מ"ר על הגג. 3 שרותים , חניה מקורה רשומה בטאבו. הדירה שקטה מאד עם
-              נוף מהמם ו-4 כיווני אוויר. הבניין שופץ פנימית וחיצונית לפני
-              כשנתיים. פינוי ארוך. ללא דמי תיווך
+              <b>תיאור היחידה: </b>
+              {{ currentHousingUnit.housingUnit.description }}
             </p>
             <mat-list>
               <mat-list-item class="divider">Item 1</mat-list-item>
               <mat-list-item class="divider">
                 <p>מ"ר בנוי</p>
                 <p>
-                  <b>{{ currentHousingUnit.area }}</b>
+                  <b>{{ currentHousingUnit.housingUnit.area }}</b>
                 </p>
               </mat-list-item>
               <mat-list-item class="divider">Item 3</mat-list-item>
             </mat-list>
             <div class="checkboxes" id="Extras">
               <!--חנייה-->
-              <span class="m-1">חנייה<mat-icon> local_parking</mat-icon></span>
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.parking }"
+                ><mat-icon> local_parking</mat-icon>חנייה</span
+              >
               <!--ממ"ד-->
-              <span class="m-1">ממ"ד<mat-icon>security</mat-icon></span>
+              <span
+                class="ml-1"
+                [ngClass]="{
+                  gray: !currentHousingUnit.housingUnit.securityRoom
+                }"
+                ><mat-icon>security</mat-icon>ממ"ד</span
+              >
               <!--גישה לנכים-->
-              <span class="m-1">גישה לנכים<mat-icon>accessible</mat-icon></span>
+              <span
+                class="ml-1"
+                [ngClass]="{
+                  gray: !currentHousingUnit.housingUnit.accessForDisabled
+                }"
+                ><mat-icon>accessible</mat-icon>גישה לנכים</span
+              >
               <!--מעלית-->
-              <span class="m-1"
-                >מעלית<span class="material-icons">elevator</span></span
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.elevator }"
+                ><span class="material-icons">elevator</span>מעלית</span
               >
               <!--מרפסת-->
-              <span class="m-1"
-                >מרפסת<span class="material-icons">balcony</span></span
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.terrace }"
+                ><span class="material-icons">balcony</span>מרפסת</span
               >
               <!--דוד שמש-->
-              <span class="m-1">דוד שמש<mat-icon>wb_sunny</mat-icon></span>
+              <span
+                class="ml-1"
+                [ngClass]="{
+                  gray: !currentHousingUnit.housingUnit.solarHeater
+                }"
+                ><mat-icon>wb_sunny</mat-icon>דוד שמש</span
+              >
               <!--מיזוג אוויר-->
-              <span class="m-1">מיזוג אוויר<mat-icon>ac_unit</mat-icon></span>
+              <span
+                class="ml-1"
+                [ngClass]="{
+                  gray: !currentHousingUnit.housingUnit.airConditioning
+                }"
+                ><mat-icon>ac_unit</mat-icon>מיזוג אוויר</span
+              >
               <!--דלתות פנדור-->
-              <span class="m-1"
-                >דלתות פנדור<span class="material-icons"
-                  >sensor_door</span
-                ></span
+              <span
+                class="ml-1"
+                [ngClass]="{
+                  gray: !currentHousingUnit.housingUnit.pandorDoors
+                }"
+                ><span class="material-icons">sensor_door</span>דלתות
+                פנדור</span
               >
               <!--בעלי חיים-->
-              <span class="m-1"
-                >בע"ח<span class="material-icons">child_care</span></span
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.animal }"
+                ><span class="material-icons">child_care</span>בע"ח</span
+              >
+              <!--סורגים-->
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.bars }"
+                ><span class="material-icons">border_all</span>סורגים</span
+              >
+              <!--מטבח כשר-->
+              <span
+                class="ml-1"
+                [ngClass]="{
+                  gray: !currentHousingUnit.housingUnit.kosherKitchen
+                }"
+                ><span class="material-icons">kitchen</span>מטבח כשר</span
+              >
+              <!--לטווח ארוך-->
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.longTerm }"
+                ><mat-icon>indeterminate_check_box</mat-icon>לטווח ארוך</span
+              >
+              <!--מחסן-->
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.warehouse }"
+                ><mat-icon>warehouse</mat-icon>מחסן</span
+              >
+              <!--לשותפים-->
+              <span
+                class="ml-1"
+                [ngClass]="{ gray: !currentHousingUnit.housingUnit.partners }"
+                ><mat-icon>people</mat-icon> לשותפים</span
               >
             </div>
           </div>
 
-          <mat-card
-            style="width: 30%; height: 17em; text-align: center"
-            *ngIf="unitOwner"
-          >
+          <mat-card class="card-phon" *ngIf="unitOwner">
             <p class="fs-5" style="color: gray">מפרסם/ת המודעה</p>
-            <p class="fs-5">
+            <p class="fs-5" *ngIf="unitOwner.firstName">
               <b>{{ unitOwner.firstName }}</b>
             </p>
             <button
@@ -147,4 +244,113 @@
       </div>
     </mat-card-content>
   </mat-card>
+  <div class="flex-q-f">
+    <!--feedback-->
+    <div class="container-feedback">
+      <mat-card class="card-feedback" *ngIf="currentHousingUnit">
+        <div class="d-flex pb-3">
+          <img style="width: 5vw" src="../../../../assets/icons/feedback.png" />
+          <span style="font-size: 4vh; padding: 5% 5% 0 0; font-weight: 600">
+            משוב מלקוחות על היחידה ({{ feedbacks.length }})</span
+          >
+        </div>
+        <div *ngIf="feedbacks.length > 0; else noFeedback">
+          <div
+            *ngFor="let feedback of feedbacks; let i = index"
+            [attr.data-index]="i"
+          >
+            <div
+              class="feedback"
+              *ngIf="customersFeedback && customersFeedback[i]"
+            >
+              <h3 *ngIf="customersFeedback[i].firstName">
+                <b>משוב </b>מאת {{ customersFeedback[i].firstName }} בתאריך
+                {{ feedback.date | date: "dd/MM/yyyy" }}
+              </h3>
+              <h2 style="font-style: italic">"{{ feedback.description }}"</h2>
+            </div>
+          </div>
+        </div>
+        <ng-template #noFeedback>
+          <h1 style="padding-right: 30%">אין משוב להצגה</h1>
+        </ng-template>
+        <form #feedbackForm="ngForm">
+          <div class="input-group mb-3">
+            <input
+              [(ngModel)]="newFeedback.description"
+              type="text"
+              id="description"
+              class="form-control"
+              placeholder="כאן אפשר לכתוב משוב על יחידת דיור זו"
+              required
+              minlength="3"
+              name="desc"
+            />
+            <button
+              mat-raised-button
+              style="background: #ffbc53"
+              id="button-addon1"
+              [disabled]="!feedbackForm.valid"
+              (click)="addFeedback(newFeedback.description)"
+            >
+              שלח משוב
+            </button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+    <!--question and answer-->
+    <div class="container-question">
+      <mat-card class="card-question" *ngIf="currentHousingUnit">
+        <div class="d-flex pb-3">
+          <img
+            style="width: 5vw"
+            src="../../../../assets/icons/questionAnswer.png"
+          />
+          <span style="font-size: 4vh; padding: 5% 5% 0 0; font-weight: 600"
+            >שאלות ותשובות ללקוחות ({{ questions.length }})</span
+          >
+        </div>
+        <div *ngIf="questions.length > 0; else noQuestions">
+          <div
+            *ngFor="let question of questions; let i = index"
+            [attr.data-index]="i"
+          >
+            <h1><b>ש. </b>{{ question.description }}</h1>
+            <p *ngFor="let answer of answers[i]">
+              <b>ת. </b> {{ answer.description }}
+            </p>
+            <!--<mat-divider style="width: 70%; right: 0"></mat-divider>-->
+          </div>
+        </div>
+        <ng-template #noQuestions>
+          <h1 style="padding-right: 30%">אין שאלות להצגה</h1>
+        </ng-template>
+        <form #questionForm="ngForm">
+          <div class="input-group mb-3">
+            <input
+              [(ngModel)]="newQuestion.description"
+              type="text"
+              id="description"
+              class="form-control"
+              minlength="3"
+              required
+              name="desc"
+              placeholder="כאן אפשר לכתוב שאלה למשכיר היחידה"
+            />
+            <button
+              mat-raised-button
+              type="submit"
+              style="background: #ffbc53"
+              id="button-addon1"
+              [disabled]="!questionForm.valid"
+              (click)="addQuestion(newQuestion.description)"
+            >
+              שלח שאלה
+            </button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  </div>
 </mat-sidenav-container>

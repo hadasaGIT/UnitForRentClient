@@ -1,323 +1,395 @@
 <mat-sidenav-container style="height: calc(100vh - 20px)">
-  <mat-card style="max-width: 50%; background-color: #f9fcff">
-    <mat-card-content>
-      <form
-        [formGroup]="formSearch"
-        class="form-inline pt-5"
-        style="width: 100%"
-      >
-        <!--<p class="main-title text-center">חיפוש יחידה להשכרה</p>-->
-        <div class="d-flex justify-content-between">
-          <!--עיר-->
-          <div class="form-group" style="width: 49%">
-            <label for="City"><b>כתובת</b></label>
-            <input
-              type="text"
-              class="form-control mx-1 my-1"
-              id="City"
-              placeholder="להזנת עיר, רחוב או שכונה"
-              formControlName="City"
-            />
-          </div>
-          <!--חדרים-->
-          <div class="form-group" style="width: 49%">
-            <label for="MinRoomsNum"><b>חדרים</b></label>
-            <div class="input-group d-flex justify-content-between">
-              <input
-                type="number"
-                class="form-control mx-1 my-1"
-                id="MinRoomsNum"
-                placeholder="מ-"
-                formControlName="MinRoomsNum"
-              />
-              <input
-                type="number"
-                class="form-control my-1"
-                id="MaxRoomsNum"
-                placeholder="עד-"
-                formControlName="MaxRoomsNum"
-              />
-            </div>
-          </div>
-          <!--**-->
-          <!--**-->
-        </div>
-
-        <div class="d-flex justify-content-between">
-          <!--מחיר-->
-          <div class="form-group" style="width: 49%">
-            <label for="FromArea"><b>דמי שכירות חודשיים</b></label>
-            <div class="input-group d-flex justify-content-between">
-              <input
-                no-wheel="false"
-                type="number"
-                class="form-control mx-1 my-1"
-                id="MinPrice"
-                placeholder="ממחיר"
-                formControlName="MinPrice"
-              />
-              <input
-                type="number"
-                class="form-control my-1"
-                id="MaxPrice"
-                placeholder="עד מחיר"
-                formControlName="MaxPrice"
-              />
-            </div>
-          </div>
-
-          <div
-            class="d-flex justify-content-between"
-            style="width: 49%; padding-top: 2%"
-          >
-            <!--מצב הנכס-->
-            <mat-form-field appearance="legacy">
-              <mat-label>מצב הנכס</mat-label>
-              <mat-select formControlName="PropertyCondition">
-                <mat-option
-                  *ngFor="let p of listPropertyConditions"
-                  [value]="p.id"
-                >
-                  {{ p.condition }}+
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <!--כפתור פילטר לפרמטרים נוספים-->
-            <div
-              [ngClass]="{ open: open, close: !open }"
-              (click)="openFilter()"
-            >
-              <div [ngClass]="{ openImg: open, closeImg: !open }"></div>
-            </div>
-            <!--כפתור חיפוש-->
-            <button
-              [disabled]="!formSearch.valid"
-              (click)="search()"
-              class="btn-search btn"
-            >
-              חיפוש
-            </button>
-          </div>
-        </div>
-
-        <!--פרמטרים נוספים-->
-        <div *ngIf="open" class="filters">
+  <div class="d-flex">
+    <mat-card style="max-width: 50%; background-color: #f9fcff">
+      <mat-card-content>
+        <form
+          [formGroup]="formSearch"
+          class="form-inline pt-5"
+          style="width: 100%"
+        >
+          <!--<p class="main-title text-center">חיפוש יחידה להשכרה</p>-->
           <div class="d-flex justify-content-between">
-            <!--קומה-->
-            <div class="form-group mx-2">
-              <label for="FromFloor"><b>קומה</b></label>
+            <!--כתובת-->
+            <div class="form-group" style="width: 49%">
+              <label for="address"><b>כתובת</b></label>
+              <input
+                #mapSearchField
+                type="text"
+                class="form-control mx-1 my-1"
+                id="address"
+                placeholder="להזנת עיר, רחוב או שכונה"
+                formControlName="Address"
+              />
+            </div>
+            <!--חדרים-->
+            <div class="form-group" style="width: 49%">
+              <label for="MinRoomsNum"><b>חדרים</b></label>
               <div class="input-group d-flex justify-content-between">
                 <input
                   type="number"
                   class="form-control mx-1 my-1"
-                  id="FromFloor"
+                  id="MinRoomsNum"
                   placeholder="מ-"
-                  formControlName="FromFloor"
+                  formControlName="MinRoomsNum"
                 />
                 <input
                   type="number"
                   class="form-control my-1"
-                  id="ToFloor"
+                  id="MaxRoomsNum"
                   placeholder="עד-"
-                  formControlName="ToFloor"
+                  formControlName="MaxRoomsNum"
                 />
               </div>
             </div>
             <!--**-->
+            <!--**-->
+          </div>
 
-            <!--שטח-->
-            <div class="form-group">
-              <label for="FromArea"><b>שטח</b></label>
+          <div class="d-flex justify-content-between">
+            <!--מחיר-->
+            <div class="form-group" style="width: 49%">
+              <label for="FromArea"><b>דמי שכירות חודשיים</b></label>
               <div class="input-group d-flex justify-content-between">
                 <input
+                  no-wheel="false"
                   type="number"
                   class="form-control mx-1 my-1"
-                  id="FromArea"
-                  placeholder="מ-"
-                  formControlName="FromArea"
+                  id="MinPrice"
+                  placeholder="ממחיר"
+                  formControlName="MinPrice"
                 />
                 <input
                   type="number"
                   class="form-control my-1"
-                  id="ToArea"
-                  placeholder="עד-"
-                  formControlName="ToArea"
+                  id="MaxPrice"
+                  placeholder="עד מחיר"
+                  formControlName="MaxPrice"
                 />
               </div>
             </div>
-          </div>
-          <label for="Extras"><b>תוספות</b></label>
-          <!--checkboxes-->
-          <div class="checkboxes" id="Extras">
-            <!--חנייה-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="parking"
-              autocomplete="off"
-              formControlName="Parking"
-            />
-            <label class="btn btn-outline-primary m-1" for="parking"
-              >חנייה<mat-icon> local_parking</mat-icon></label
+
+            <div
+              class="d-flex justify-content-between"
+              style="width: 49%; padding-top: 2%"
             >
-            <!--ממ"ד-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="securityRoom"
-              autocomplete="off"
-              formControlName="SecurityRoom"
-            />
-            <label class="btn btn-outline-primary m-1" for="securityRoom"
-              >ממ"ד<mat-icon>security</mat-icon></label
-            >
-            <!--גישה לנכים-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="accessForDisabled"
-              autocomplete="off"
-              formControlName="AccessForDisabled"
-            />
-            <label class="btn btn-outline-primary m-1" for="accessForDisabled"
-              >גישה לנכים<mat-icon>accessible</mat-icon></label
-            >
-            <!--מעלית-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="elevator"
-              autocomplete="off"
-              formControlName="Elevator"
-            />
-            <label class="btn btn-outline-primary m-1" for="elevator"
-              >מעלית<span class="material-icons">elevator</span></label
-            >
-            <!--מרפסת-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="terrace"
-              autocomplete="off"
-              formControlName="Terrace"
-            />
-            <label class="btn btn-outline-primary m-1" for="terrace"
-              >מרפסת<span class="material-icons">balcony</span></label
-            >
-            <!--דוד שמש-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="solarHeater"
-              autocomplete="off"
-              formControlName="SolarHeater"
-            />
-            <label class="btn btn-outline-primary m-1" for="solarHeater"
-              >דוד שמש<mat-icon>wb_sunny</mat-icon></label
-            >
-            <!--מיזוג אוויר-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="airConditioning"
-              autocomplete="off"
-              formControlName="AirConditioning"
-            />
-            <label class="btn btn-outline-primary m-1" for="airConditioning"
-              >מיזוג אוויר<mat-icon>ac_unit</mat-icon></label
-            >
-            <!--דלתות פנדור-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="pandorDoors"
-              autocomplete="off"
-              formControlName="PandorDoors"
-            />
-            <label class="btn btn-outline-primary m-1" for="pandorDoors"
-              >דלתות פנדור<span class="material-icons">sensor_door</span></label
-            >
-            <!--בעלי חיים-->
-            <input
-              mdbCheckbox
-              type="checkbox"
-              class="btn-check"
-              id="animal"
-              autocomplete="off"
-              formControlName="Animal"
-            />
-            <label class="btn btn-outline-primary m-1" for="animal"
-              >בע"ח<span class="material-icons">child_care</span></label
-            >
-          </div>
-          <div class="d-flex justify-content-between">
-            <div class="form-group">
-              <!--רמת ריהוט-->
-              <mat-form-field appearance="legacy" style="margin-left: 2%">
-                <mat-label>רמת ריהוט</mat-label>
-                <mat-select formControlName="Furniture">
+              <!--מצב הנכס-->
+              <mat-form-field appearance="legacy">
+                <mat-label>מצב הנכס</mat-label>
+                <mat-select formControlName="PropertyCondition">
                   <mat-option
-                    *ngFor="let level of listFurnitureLevel"
-                    [value]="level.id"
+                    *ngFor="let p of listPropertyConditions"
+                    [value]="p.id"
                   >
-                    {{ level.level }} +
+                    {{ p.condition }}+
                   </mat-option>
                 </mat-select>
               </mat-form-field>
-              <!--תאריך כניסה-->
+
+              <!--כפתור פילטר לפרמטרים נוספים-->
+              <div
+                [ngClass]="{ open: open, close: !open }"
+                (click)="openFilter()"
+              >
+                <div [ngClass]="{ openImg: open, closeImg: !open }"></div>
+              </div>
+              <!--כפתור חיפוש-->
+              <button
+                [disabled]="!formSearch.valid"
+                (click)="search()"
+                class="btn-search btn"
+              >
+                חיפוש
+              </button>
+            </div>
+          </div>
+
+          <!--פרמטרים נוספים-->
+          <div *ngIf="open" class="filters">
+            <div class="d-flex justify-content-between">
+              <!--קומה-->
+              <div class="form-group mx-2">
+                <label for="FromFloor"><b>קומה</b></label>
+                <div class="input-group d-flex justify-content-between">
+                  <input
+                    type="number"
+                    class="form-control mx-1 my-1"
+                    id="FromFloor"
+                    placeholder="מ-"
+                    formControlName="FromFloor"
+                  />
+                  <input
+                    type="number"
+                    class="form-control my-1"
+                    id="ToFloor"
+                    placeholder="עד-"
+                    formControlName="ToFloor"
+                  />
+                </div>
+              </div>
+              <!--**-->
+
+              <!--שטח-->
+              <div class="form-group">
+                <label for="FromArea"><b>שטח</b></label>
+                <div class="input-group d-flex justify-content-between">
+                  <input
+                    type="number"
+                    class="form-control mx-1 my-1"
+                    id="FromArea"
+                    placeholder="מ-"
+                    formControlName="FromArea"
+                  />
+                  <input
+                    type="number"
+                    class="form-control my-1"
+                    id="ToArea"
+                    placeholder="עד-"
+                    formControlName="ToArea"
+                  />
+                </div>
+              </div>
+            </div>
+            <label for="Extras"><b>תוספות</b></label>
+            <!--checkboxes-->
+            <div class="checkboxes" id="Extras">
+              <!--חנייה-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="parking"
+                autocomplete="off"
+                formControlName="Parking"
+              />
+              <label class="btn btn-outline-primary m-1" for="parking"
+                >חנייה<mat-icon> local_parking</mat-icon></label
+              >
+              <!--ממ"ד-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="securityRoom"
+                autocomplete="off"
+                formControlName="SecurityRoom"
+              />
+              <label class="btn btn-outline-primary m-1" for="securityRoom"
+                >ממ"ד<mat-icon>security</mat-icon></label
+              >
+              <!--גישה לנכים-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="accessForDisabled"
+                autocomplete="off"
+                formControlName="AccessForDisabled"
+              />
+              <label class="btn btn-outline-primary m-1" for="accessForDisabled"
+                >גישה לנכים<mat-icon>accessible</mat-icon></label
+              >
+              <!--מעלית-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="elevator"
+                autocomplete="off"
+                formControlName="Elevator"
+              />
+              <label class="btn btn-outline-primary m-1" for="elevator"
+                >מעלית<span class="material-icons">elevator</span></label
+              >
+              <!--מרפסת-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="terrace"
+                autocomplete="off"
+                formControlName="Terrace"
+              />
+              <label class="btn btn-outline-primary m-1" for="terrace"
+                >מרפסת<span class="material-icons">balcony</span></label
+              >
+              <!--דוד שמש-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="solarHeater"
+                autocomplete="off"
+                formControlName="SolarHeater"
+              />
+              <label class="btn btn-outline-primary m-1" for="solarHeater"
+                >דוד שמש<mat-icon>wb_sunny</mat-icon></label
+              >
+              <!--מיזוג אוויר-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="airConditioning"
+                autocomplete="off"
+                formControlName="AirConditioning"
+              />
+              <label class="btn btn-outline-primary m-1" for="airConditioning"
+                >מיזוג אוויר<mat-icon>ac_unit</mat-icon></label
+              >
+              <!--דלתות פנדור-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="pandorDoors"
+                autocomplete="off"
+                formControlName="PandorDoors"
+              />
+              <label class="btn btn-outline-primary m-1" for="pandorDoors"
+                >דלתות פנדור<span class="material-icons"
+                  >sensor_door</span
+                ></label
+              >
+              <!--בעלי חיים-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="animal"
+                autocomplete="off"
+                formControlName="Animal"
+              />
+              <label class="btn btn-outline-primary m-1" for="animal"
+                >בע"ח<span class="material-icons">child_care</span></label
+              >
+              <!--סורגים-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="bars"
+                autocomplete="off"
+                formControlName="bars"
+              />
+              <label class="btn btn-outline-primary m-1" for="bars"
+                >סורגים<mat-icon>border_all</mat-icon></label
+              >
+              <!--מטבח כשר-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="kosherKitchen"
+                autocomplete="off"
+                formControlName="kosherKitchen"
+              />
+              <label class="btn btn-outline-primary m-1" for="kosherKitchen"
+                >מטבח כשר<span class="material-icons">kitchen</span></label
+              >
+              <!--לטווח ארוך-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="longTerm"
+                autocomplete="off"
+                formControlName="longTerm"
+              />
+              <label class="btn btn-outline-primary m-1" for="longTerm"
+                >לטווח ארוך<mat-icon>indeterminate_check_box</mat-icon></label
+              >
+              <!--מחסן-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="warehouse"
+                autocomplete="off"
+                formControlName="warehouse"
+              />
+              <label class="btn btn-outline-primary m-1" for="warehouse"
+                >מחסן<mat-icon>warehouse</mat-icon></label
+              >
+              <!--לשותפים-->
+              <input
+                mdbCheckbox
+                type="checkbox"
+                class="btn-check"
+                id="partners"
+                autocomplete="off"
+                formControlName="partners"
+              />
+              <label class="btn btn-outline-primary m-1" for="partners"
+                >לשותפים<mat-icon>people</mat-icon>
+              </label>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="form-group">
+                <!--רמת ריהוט-->
+                <mat-form-field appearance="legacy" style="margin-left: 2%">
+                  <mat-label>רמת ריהוט</mat-label>
+                  <mat-select formControlName="Furniture">
+                    <mat-option
+                      *ngFor="let level of listFurnitureLevel"
+                      [value]="level.id"
+                    >
+                      {{ level.level }} +
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <!--תאריך כניסה-->
+                <mat-form-field appearance="legacy">
+                  <mat-label>תאריך כניסה ליחידה</mat-label>
+                  <input
+                    matInput
+                    [matDatepicker]="picker"
+                    formControlName="EvacuationDate"
+                    placeholder="בחר תאריך או סמן כניסה מיידית"
+                  />
+                  <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                  ></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <!--חיפוש חופשי-->
               <mat-form-field appearance="legacy">
-                <mat-label>תאריך כניסה ליחידה</mat-label>
+                <mat-label>חיפוש חופשי</mat-label>
                 <input
                   matInput
-                  [matDatepicker]="picker"
-                  formControlName="EvacuationDate"
-                  placeholder="בחר תאריך או סמן כניסה מיידית"
+                  type="text"
+                  [(ngModel)]="valueDescription"
+                  formControlName="Description"
                 />
-                <mat-datepicker-toggle
+                <button
+                  *ngIf="valueDescription"
                   matSuffix
-                  [for]="picker"
-                ></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                  mat-icon-button
+                  aria-label="Clear"
+                  (click)="valueDescription = ''"
+                >
+                  <mat-icon>close</mat-icon>
+                </button>
               </mat-form-field>
             </div>
-            <!--חיפוש חופשי-->
-            <mat-form-field appearance="legacy">
-              <mat-label>חיפוש חופשי</mat-label>
-              <input
-                matInput
-                type="text"
-                [(ngModel)]="valueDescription"
-                formControlName="Description"
-              />
-              <button
-                *ngIf="valueDescription"
-                matSuffix
-                mat-icon-button
-                aria-label="Clear"
-                (click)="valueDescription = ''"
-              >
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-form-field>
           </div>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+        </form>
+        <!--google maps-->
+      </mat-card-content>
+    </mat-card>
+    <div class="google-map-wrapper">
+      <google-map>
+        <!-- <map-marker [position]="marker.position"></map-marker> -->
+      </google-map>
+    </div>
+  </div>
 
   <!--הצגת יחידות דיור תואמות לפרמטרי החיפוש-->
   <mat-accordion>
     <mat-expansion-panel
-      *ngFor="let HousingUnit of listHousingUnit"
+      *ngFor="let HousingUnitFull of listHousingUnit; let i = index"
+      [attr.data-index]="i"
       (opened)="panelOpenState = true"
       (closed)="panelOpenState = false"
     >
@@ -331,41 +403,59 @@
               <div class="d-flex justify-content-between" style="width: 95%">
                 <div class="">
                   <h3>יחידת דיור</h3>
-                  <h2>{{ HousingUnit.city }}</h2>
+                  <h2>{{ HousingUnitFull.housingUnit.address }}</h2>
                 </div>
                 <div>
-                  <h1 class="pt-4">{{ HousingUnit.price }} ₪</h1>
+                  <h1 class="pt-4">
+                    {{ HousingUnitFull.housingUnit.price }} ₪
+                  </h1>
                 </div>
               </div>
               <div class="card-header">
-                <span class="text-bottom">{{ HousingUnit.area }} מ"ר</span>
                 <span class="text-bottom"
-                  >{{ HousingUnit.roomsNum }} חדרים</span
+                  >{{ HousingUnitFull.housingUnit.area }} מ"ר</span
                 >
-                <span class="text-bottom">קומה {{ HousingUnit.floor }}</span>
+                <span class="text-bottom"
+                  >{{ HousingUnitFull.housingUnit.roomsNum }} חדרים</span
+                >
+                <span class="text-bottom"
+                  >קומה {{ HousingUnitFull.housingUnit.floor }}
+                  <span *ngIf="HousingUnitFull.housingUnit.floorsBuilding">
+                    מתוך {{ HousingUnitFull.housingUnit.floorsBuilding }}
+                  </span></span
+                >
 
                 <button
+                  *ngIf="HousingUnitFull.isFavorite"
                   mat-icon-button
                   color="warn"
-                  (click)="addFavorite(HousingUnit.id)"
+                  (click)="removeFavorite(HousingUnitFull.housingUnit.id)"
                 >
-                  <mat-icon *ngIf="isFavorite(HousingUnit.id)"
-                    >favorite</mat-icon
-                  >
-                  <mat-icon *ngIf="!isFavorite(HousingUnit.id)"
-                    >favorite_border</mat-icon
-                  >
+                  <mat-icon>favorite</mat-icon>
+                </button>
+                <button
+                  *ngIf="!HousingUnitFull.isFavorite"
+                  mat-icon-button
+                  color="warn"
+                  (click)="addFavorite(HousingUnitFull.housingUnit.id)"
+                >
+                  <mat-icon>favorite_border</mat-icon>
                 </button>
               </div>
             </div>
           </div>
-          <!--<div class="flex-shrink-1 bd-highlight">
+          <div class="flex-shrink-1 bd-highlight">
             <img
-              *ngIf="mapHousingUnitImage.get(HousingUnit)"
+              *ngIf="HousingUnitFull.images.length > 0"
               class="rounded float-start"
-              [src]="mapHousingUnitImage.get(HousingUnit)"
+              [src]="HousingUnitFull.images[0]"
             />
-          </div>-->
+            <img
+              *ngIf="HousingUnitFull.images.length == 0"
+              class="rounded float-start"
+              src="../../../../../assets/img/LOGOֹ2.png"
+            />
+          </div>
         </div>
 
         <!--  <div class="">
@@ -380,8 +470,167 @@
           </div>
         </mat-panel-description>-->
       </mat-expansion-panel-header>
+      <div class="d-flex justify-content-around">
+        <div class="param p-4" style="width: 60vw">
+          <label for="description"><b>תיאור היחידה: </b></label>
+          <p id="description">{{ HousingUnitFull.housingUnit.description }}</p>
 
-      <p>{{ HousingUnit.description }}</p>
+          <p class="param">
+            <b> תאריך כניסה:</b>
+            {{
+              HousingUnitFull.housingUnit.evacuationDate | date: "dd/MM/yyyy"
+            }}
+          </p>
+          <p class="param">
+            <b> מצב נכס: </b
+            >{{
+              getPropertyConditionById(
+                HousingUnitFull.housingUnit.propertyCondition
+              )
+            }}
+          </p>
+          <p class="param">
+            <b> תשלומים: </b>0{{ HousingUnitFull.housingUnit.payment }}
+          </p>
+          <p class="param">
+            <b> ריהוט:</b>
+            {{ getFurnitureLevelById(HousingUnitFull.housingUnit.furniture) }}
+          </p>
+        </div>
+        <div class="param p-4">
+          <label for="Extras"><b>תוספות</b></label>
+          <div class="checkboxes" id="Extras">
+            <!--חנייה-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.parking }"
+              ><mat-icon> local_parking</mat-icon>חנייה</span
+            >
+            <!--ממ"ד-->
+            <span
+              class="ml-1"
+              [ngClass]="{
+                gray: !HousingUnitFull.housingUnit.securityRoom
+              }"
+              ><mat-icon>security</mat-icon>ממ"ד</span
+            >
+            <!--גישה לנכים-->
+            <span
+              class="ml-1"
+              [ngClass]="{
+                gray: !HousingUnitFull.housingUnit.accessForDisabled
+              }"
+              ><mat-icon>accessible</mat-icon>גישה לנכים</span
+            >
+            <!--מעלית-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.elevator }"
+              ><span class="material-icons">elevator</span>מעלית</span
+            >
+            <!--מרפסת-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.terrace }"
+              ><span class="material-icons">balcony</span>מרפסת</span
+            >
+            <!--דוד שמש-->
+            <span
+              class="ml-1"
+              [ngClass]="{
+                gray: !HousingUnitFull.housingUnit.solarHeater
+              }"
+              ><mat-icon>wb_sunny</mat-icon>דוד שמש</span
+            >
+            <!--מיזוג אוויר-->
+            <span
+              class="ml-1"
+              [ngClass]="{
+                gray: !HousingUnitFull.housingUnit.airConditioning
+              }"
+              ><mat-icon>ac_unit</mat-icon>מיזוג אוויר</span
+            >
+            <!--דלתות פנדור-->
+            <span
+              class="ml-1"
+              [ngClass]="{
+                gray: !HousingUnitFull.housingUnit.pandorDoors
+              }"
+              ><span class="material-icons">sensor_door</span>דלתות פנדור</span
+            >
+            <!--בעלי חיים-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.animal }"
+              ><span class="material-icons">child_care</span>בע"ח</span
+            >
+            <!--סורגים-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.bars }"
+              ><span class="material-icons">border_all</span>סורגים</span
+            >
+            <!--מטבח כשר-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.kosherKitchen }"
+              ><span class="material-icons">kitchen</span>מטבח כשר</span
+            >
+            <!--לטווח ארוך-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.longTerm }"
+              ><mat-icon>indeterminate_check_box</mat-icon>לטווח ארוך</span
+            >
+            <!--מחסן-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.warehouse }"
+              ><mat-icon>warehouse</mat-icon>מחסן</span
+            >
+            <!--לשותפים-->
+            <span
+              class="ml-1"
+              [ngClass]="{ gray: !HousingUnitFull.housingUnit.partners }"
+              ><mat-icon>people</mat-icon> לשותפים</span
+            >
+          </div>
+        </div>
+        <div class="p-4">
+          <mat-card class="card-phon" *ngIf="unitOwners[i]">
+            <p class="fs-5" style="color: gray">מפרסם/ת המודעה</p>
+            <p class="fs-5">
+              <b> {{ unitOwners[i].firstName }}</b>
+            </p>
+            <button
+              class="button-68 mt-3"
+              role="button"
+              (click)="isActive()"
+              [ngClass]="{ hide: hide }"
+            >
+              <span><mat-icon> phone</mat-icon></span> הצגת מספר טלפון
+            </button>
+
+            <div *ngIf="hide" class="pt-3">
+              <p class="fs-5">
+                <span><mat-icon> stay_current_portrait</mat-icon></span>
+                {{ unitOwners[i].phon1 }}
+              </p>
+              <p class="fs-5 pt-2" *ngIf="unitOwners[i].phon2">
+                <span><mat-icon> stay_current_portrait</mat-icon></span>
+                {{ unitOwners[i].phon2 }}
+              </p>
+            </div>
+          </mat-card>
+        </div>
+      </div>
+      <button
+        mat-icon-button
+        color="primary"
+        (click)="openDetailsHousingUnit(HousingUnitFull.housingUnit.id)"
+      >
+        <mat-icon>open_in_new</mat-icon>
+      </button>
     </mat-expansion-panel>
   </mat-accordion>
 </mat-sidenav-container>
@@ -391,8 +640,4 @@
   #placesRef="ngx-places"
   (onAddressChange)="handleDestinationChange($event)"
   placeholder="Address to"
-/>
-
-<agm-map [latitude]="lat" [longitude]="lng">
-  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-</agm-map>-->
+/>-->

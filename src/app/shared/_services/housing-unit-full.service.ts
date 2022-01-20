@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { promise } from 'protractor';
 import { observable, Observable } from 'rxjs';
@@ -8,36 +9,23 @@ import { HousingUnitImageService } from './housing-unit-image.service';
 
 @Injectable()
 export class HousingUnitFullService {
-  constructor(
-    private _serviceHousingUnitImage: HousingUnitImageService,
-    private _serviceHousingUnitRelevantService: HousingUnitRelevantService
-  ) {}
+  constructor(private _http: HttpClient) {}
 
-  GetHousingUnitFull(housingUnit: HousingUnit[]) {
-    
-    
-
-    // this._serviceHousingUnitImage
-    //   .GetHousingUnitImageById(Number(housingUnit.id))
-    //   .subscribe(
-    //     (image) => {
-    //       return new HousingUnitFull(
-    //         housingUnit,
-    //         image.images,
-    //         this._serviceHousingUnitRelevantService.isRelevantById(
-    //           Number(housingUnit.id)
-    //         )
-    //       );
-    //     },
-    //     (error) => {
-    //       return new HousingUnitFull(
-    //         housingUnit,
-    //         "",
-    //         this._serviceHousingUnitRelevantService.isRelevantById(
-    //           Number(housingUnit.id)
-    //         )
-    //       );
-    //     }
-    //   );
+  GetAllHousingUnitsFull(customerId: number): Observable<HousingUnitFull[]> {
+    return this._http.get<HousingUnitFull[]>(
+      '/api/HousingUnitFull/GetAllHousingUnitsFull/' + customerId
+    );
+  }
+  x: string = '';
+  GetHousingUnitFullByHousingUnit(
+    housingUnitId: number,
+    customerId: number
+  ): Observable<HousingUnitFull> {
+    console.log(housingUnitId);
+    console.log(customerId);
+    this.x = housingUnitId + 'b' + customerId;
+    return this._http.get<HousingUnitFull>(
+      '/api/HousingUnitFull/GetHousingUnitFullByHousingUnit/' + this.x
+    );
   }
 }

@@ -1,21 +1,33 @@
-<p>personal-area works!</p>
-<span>שלום <b></b> יש לך <b></b> מודעות פעילות</span>
 <mat-sidenav-container style="height: calc(100vh - 20px)">
-  <mat-card>
-    <mat-card-content>
-      <button
-        mat-raised-button
-        color="primary"
-        routerLink="/customer/customer-info"
-      >
-        עדכון פרטי משתמש</button
-      ><br />
-      <button mat-raised-button color="primary" routerLink="/customer/list">
-        עדכון ועריכת מודעות</button
-      ><br />
-      <button mat-raised-button color="primary" routerLink="/customer/publish">
-        פרסום מודעה חדשה</button
-      ><br />
-    </mat-card-content>
-  </mat-card>
+  <h1>
+    שלום <b>{{ customerById.firstName }}!</b>
+  </h1>
+  <h2 style="width: 71vw; padding-right: 30%">
+    {{ customerById.firstName }}, כאן תוכל/י להוסיף מודעות חדשות ולבצע שינויים
+    על המודעות שלך, למשל למחוק, לעדכן להוסיף תמונות ועוד. כאן תוכל\י גם לערוך את
+    פרטי המשתמש שלך.
+  </h2>
+  <div style="display: flex; justify-content: center">
+    <button
+      class="button-80"
+      role="button"
+      routerLink="/customer/customer-info"
+    >
+      עדכון פרטי משתמש</button
+    ><br />
+    <button class="button-80" role="button" routerLink="/customer/list">
+      עדכון ועריכת מודעות</button
+    ><br />
+    <button class="button-80" role="button" routerLink="/customer/publish">
+      פרסום מודעה חדשה</button
+    ><br />
+    <button
+      *ngIf="!customerById.isActive"
+      class="button-80"
+      role="button"
+      routerLink="/customer/payment"
+    >
+      עדכון מנוי</button
+    ><br />
+  </div>
 </mat-sidenav-container>

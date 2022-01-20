@@ -1,88 +1,97 @@
 <mat-sidenav-container style="height: calc(100vh - 20px)">
   <p class="main-title text-center">פרסום מודעה חדשה</p>
 
-  <mat-vertical-stepper linear #stepper dir="rtl">
-    <mat-step [stepControl]="publishForm" [editable]="isEditable">
-      <p class="main-title text-center" style="font-size: 2em">פרטי היחידה</p>
-      <form
-        [formGroup]="publishForm"
-        class="form-inline pt-2"
-        (ngSubmit)="publish()"
-      >
+  <mat-vertical-stepper [linear]="true" #stepper dir="rtl">
+    <mat-step [stepControl]="publishForm">
+      <p class="main-title text-center">פרטי היחידה</p>
+      <form [formGroup]="publishForm" class="form-inline pt-2">
         <ng-template matStepLabel
           >פרטי המודעה- חובה למלא את כל הפרטים!</ng-template
         >
-        <!--כתובת-->
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>כתובת</mat-label>
-          <input
-            matInput
-            placeholder=" הקלד כתובת מלאה לדוגמא מעלה החמישה 17 ראשון לציון"
-            formControlName="address"
-            type="text"
-            required
-          />
-        </mat-form-field>
-        <div
-          class="input-group d-flex justify-content-between"
-          style="width: 100%"
-        >
+        <div class="d-flex flex-wrap full-width">
+          <!--כתובת-->
+          <mat-form-field appearance="outline" class="big">
+            <mat-label>כתובת</mat-label>
+            <input
+              #mapSearchField
+              matInput
+              placeholder="הקלד כתובת מלאה לדוגמא מעלה החמישה 17 ראשון לציון"
+              formControlName="address"
+              type="text"
+            />
+          </mat-form-field>
           <!--שטח-->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline" class="mini">
             <mat-label>שטח</mat-label>
             <input
               matInput
               placeholder="שטח"
               formControlName="area"
               type="number"
-              required
             />
           </mat-form-field>
           <!--מספר חדרים-->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline" class="mini">
             <mat-label>חדרים</mat-label>
             <input
               matInput
               placeholder="מספר חדרים"
               formControlName="roomsNum"
               type="number"
-              required
             />
           </mat-form-field>
           <!--קומה-->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline" class="mini">
             <mat-label>קומה</mat-label>
             <input
               matInput
               placeholder="מספר הקומה"
               formControlName="floor"
               type="number"
-              required
             />
           </mat-form-field>
-        </div>
-        <!--תאריך כניסה-->
-        <mat-form-field appearance="fill">
-          <mat-label>תאריך כניסה</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            formControlName="occupancyDate"
-            placeholder="בחר תאריך או סמן כניסה מיידית"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <div
-          class="input-group d-flex justify-content-between"
-          style="width: 100%"
-        >
+          <!--קומות בבניין-->
+          <mat-form-field appearance="outline" class="mini">
+            <mat-label>קומות בבניין</mat-label>
+            <input
+              matInput
+              placeholder="מספר קומות בבנין היחידה"
+              formControlName="floorsBuilding"
+              type="number"
+            />
+          </mat-form-field>
+          <!--תאריך כניסה-->
+          <mat-form-field appearance="outline" class="small">
+            <mat-label>תאריך כניסה</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="occupancyDate"
+              placeholder="בחר תאריך - לכניסה מיידית סמן תאריך נוכחי!"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <!--תאריך פינוי-->
+          <mat-form-field appearance="outline" class="small">
+            <mat-label>השכרה עד לתאריך</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker2"
+              formControlName="evacuationDate"
+              placeholder="אם השכירות מוגבלת עד לתאריך מסוים- סמן כאן!"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
           <!--רמת ריהוט-->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline" class="small">
             <mat-label>רמת ריהוט</mat-label>
             <mat-select formControlName="furniture">
               <mat-option
@@ -94,7 +103,7 @@
             </mat-select>
           </mat-form-field>
           <!--מצב הנכס-->
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline" class="small">
             <mat-label>מצב הנכס</mat-label>
             <mat-select formControlName="propertyCondition">
               <mat-option
@@ -116,7 +125,7 @@
             autocomplete="off"
             formControlName="parking"
           />
-          <label class="btn btn-outline-primary m-1" for="parking"
+          <label class="btn btn-outline-danger m-1" for="parking"
             >חנייה<mat-icon> local_parking</mat-icon></label
           >
           <!--ממ"ד-->
@@ -128,18 +137,9 @@
             autocomplete="off"
             formControlName="securityRoom"
           />
-          <label class="btn btn-outline-primary m-1" for="securityRoom"
+          <label class="btn btn-outline-danger m-1" for="securityRoom"
             >ממ"ד<mat-icon>security</mat-icon></label
           >
-          <!--מחסן
-        <input
-          mdbCheckbox
-          type="checkbox"
-          class="btn-check"
-          id="btn-check3"
-          autocomplete="off"
-        />
-        <label class="btn btn-outline-primary" for="btn-check3">מחסן</label>-->
           <!--גישה לנכים-->
           <input
             mdbCheckbox
@@ -149,7 +149,7 @@
             autocomplete="off"
             formControlName="accessForDisabled"
           />
-          <label class="btn btn-outline-primary m-1" for="accessForDisabled"
+          <label class="btn btn-outline-danger m-1" for="accessForDisabled"
             >גישה לנכים<mat-icon>accessible</mat-icon></label
           >
           <!--מעלית-->
@@ -161,7 +161,7 @@
             autocomplete="off"
             formControlName="elevator"
           />
-          <label class="btn btn-outline-primary m-1" for="elevator"
+          <label class="btn btn-outline-danger m-1" for="elevator"
             >מעלית<span class="material-icons">elevator</span></label
           >
           <!--מרפסת-->
@@ -173,7 +173,7 @@
             autocomplete="off"
             formControlName="terrace"
           />
-          <label class="btn btn-outline-primary m-1" for="terrace"
+          <label class="btn btn-outline-danger m-1" for="terrace"
             >מרפסת<span class="material-icons">balcony</span></label
           >
           <!--דוד שמש-->
@@ -185,7 +185,7 @@
             autocomplete="off"
             formControlName="solarHeater"
           />
-          <label class="btn btn-outline-primary m-1" for="solarHeater"
+          <label class="btn btn-outline-danger m-1" for="solarHeater"
             >דוד שמש<mat-icon>wb_sunny</mat-icon></label
           >
           <!--מיזוג אוויר-->
@@ -197,7 +197,7 @@
             autocomplete="off"
             formControlName="airConditioning"
           />
-          <label class="btn btn-outline-primary m-1" for="airConditioning"
+          <label class="btn btn-outline-danger m-1" for="airConditioning"
             >מיזוג אוויר<mat-icon>ac_unit</mat-icon></label
           >
           <!--דלתות פנדור-->
@@ -209,7 +209,7 @@
             autocomplete="off"
             formControlName="pandorDoors"
           />
-          <label class="btn btn-outline-primary m-1" for="pandorDoors"
+          <label class="btn btn-outline-danger m-1" for="pandorDoors"
             >דלתות פנדור<span class="material-icons">sensor_door</span></label
           >
           <!--בעלי חיים-->
@@ -221,11 +221,72 @@
             autocomplete="off"
             formControlName="animal"
           />
-          <label class="btn btn-outline-primary m-1" for="animal"
+          <label class="btn btn-outline-danger m-1" for="animal"
             >בע"ח<span class="material-icons">child_care</span></label
           >
+          <!--סורגים-->
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="btn-check"
+            id="bars"
+            autocomplete="off"
+            formControlName="bars"
+          />
+          <label class="btn btn-outline-danger m-1" for="bars"
+            >סורגים<mat-icon>border_all</mat-icon></label
+          >
+          <!--מטבח כשר-->
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="btn-check"
+            id="kosherKitchen"
+            autocomplete="off"
+            formControlName="kosherKitchen"
+          />
+          <label class="btn btn-outline-danger m-1" for="kosherKitchen"
+            >מטבח כשר<span class="material-icons">kitchen</span></label
+          >
+          <!--לטווח ארוך-->
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="btn-check"
+            id="longTerm"
+            autocomplete="off"
+            formControlName="longTerm"
+          />
+          <label class="btn btn-outline-danger m-1" for="longTerm"
+            >לטווח ארוך</label
+          >
+          <!--מחסן-->
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="btn-check"
+            id="warehouse"
+            autocomplete="off"
+            formControlName="warehouse"
+          />
+          <label class="btn btn-outline-danger m-1" for="warehouse"
+            >מחסן<mat-icon>warehouse</mat-icon></label
+          >
+          <!--לשותפים-->
+          <input
+            mdbCheckbox
+            type="checkbox"
+            class="btn-check"
+            id="partners"
+            autocomplete="off"
+            formControlName="partners"
+          />
+          <label class="btn btn-outline-danger m-1" for="partners"
+            >לשותפים</label
+          >
         </div>
-        <mat-form-field appearance="fill">
+        <!--תיאור חופשי-->
+        <mat-form-field appearance="outline" class="full-width">
           <mat-label>טקסט חופשי</mat-label>
           <textarea
             matInput
@@ -233,48 +294,106 @@
             style="height: 12vh"
           ></textarea>
         </mat-form-field>
-        <!--מחיר-->
-        <mat-form-field appearance="fill">
-          <mat-label>מחיר</mat-label>
-          <input
-            matInput
-            placeholder="מחיר"
-            formControlName="price"
-            type="number"
-            required
-          />
-        </mat-form-field>
-        <div>
-          <button mat-flat-button color="accent" matStepperNext>
+        <div class="d-flex flex-wrap full-width">
+          <!--מחיר-->
+          <mat-form-field appearance="outline" floatLabel="always">
+            <mat-label>מחיר</mat-label>
+            <input
+              matInput
+              type="number"
+              class="example-right-align"
+              placeholder="0"
+              formControlName="price"
+            />
+            <span matSuffix>₪&nbsp; לחודש</span>
+            <span matPrefix>00.</span>
+          </mat-form-field>
+          <!--מחיר גמיש-->
+          <mat-checkbox formControlName="flexible" class="p-3"
+            >גמיש</mat-checkbox
+          >
+          <!--ועד בית-->
+          <mat-form-field
+            appearance="outline"
+            class="small"
+            floatLabel="always"
+          >
+            <mat-label>ועד בית</mat-label>
+            <input
+              matInput
+              type="number"
+              class="example-right-align"
+              placeholder="עלות ועד בית לחודש"
+              formControlName="committeeHome"
+            />
+            <span matSuffix>₪&nbsp; לחודש</span>
+            <span matPrefix>00.</span>
+          </mat-form-field>
+          <!--ארנונה לחודשיים-->
+          <mat-form-field
+            appearance="outline"
+            class="small"
+            floatLabel="always"
+          >
+            <mat-label>ארנונה</mat-label>
+            <input
+              matInput
+              type="number"
+              class="example-right-align"
+              placeholder="עלות ארנונה לחודשיים"
+              formControlName="propertyTax"
+            />
+            <span matSuffix>₪&nbsp; לחודשיים</span>
+            <span matPrefix>00.</span>
+          </mat-form-field>
+          <!--תשלומים-->
+          <mat-form-field appearance="outline" class="mini">
+            <mat-label>תשלומים</mat-label>
+            <input
+              matInput
+              placeholder="מספר תשלומים"
+              formControlName="payment"
+              type="number"
+              value="0"
+            />
+          </mat-form-field>
+        </div>
+        <div class="buttons">
+          <button class="button-44 reset" (click)="stepper.reset()">
+            מחק הכל
+          </button>
+          <button class="button-44" role="button" matStepperNext>
             שמור והמשך
           </button>
         </div>
       </form>
     </mat-step>
-    <!--<mat-step [stepControl]="imageForm" [editable]="isEditable">
-      <form [formGroup]="imageForm">
-        <ng-template matStepLabel>Fill out your address</ng-template>
-
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>-->
     <mat-step>
       <ng-template matStepLabel>תמונות</ng-template>
       <p>הוספת תמונות</p>
+      <h3>מומלץ!! תמונות מעלות את אחוזי ההתענינות במודעה!</h3>
       <div class="center form-input d-flex align-content-start flex-wrap">
-        <div
-          style="width: 20%; margin-bottom: 5%"
-          *ngFor="let item of images; let i = index"
-          [attr.data-index]="i"
-        >
-          <label for="image-id" color="accent" class="label-upload"
-            >תמונה {{ i }}</label
-          >
+        <div *ngFor="let item of images" style="width: 20%; margin-bottom: 5%">
+          <div class="d-flex">
+            <label
+              class="label-upload"
+              role="button"
+              (click)="addImage(item.Id)"
+              for="image-id"
+              role="button"
+              >העלה תמונה</label
+            >
+            <button
+              (click)="removeImage(item.Id)"
+              mat-fab
+              color="primary"
+              aria-label="Example icon button with a delete icon"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
           <div class="preview">
-            <img [src]="item" height="100" width="100" />
+            <img [src]="item.image" height="100" width="100" />
           </div>
           <input
             class="uploadImg"
@@ -286,9 +405,23 @@
           />
         </div>
       </div>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
+      <div class="buttons">
+        <button class="button-44 reset" matStepperPrevious>הקודם</button>
+        <button class="button-44 reset" (click)="stepper.reset()">
+          מחק הכל
+        </button>
+        <button class="button-44" matStepperNext>שמור והמשך</button>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>סיום</ng-template>
+      <p>פרסם את היחידה שלך</p>
+      <div class="buttons">
+        <button class="button-44 reset" matStepperPrevious>Back</button>
+        <button class="button-44 reset" (click)="stepper.reset()">Reset</button>
+        <button class="button-44" routerLink="/customer" (click)="publish()">
+          שמור ופרסם
+        </button>
       </div>
     </mat-step>
   </mat-vertical-stepper>

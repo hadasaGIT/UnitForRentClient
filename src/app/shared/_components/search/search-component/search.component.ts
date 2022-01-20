@@ -1,6 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { GoogleMap } from '@angular/google-maps';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
+import { Customer2 } from 'src/app/modules/customer/models/customer2.model';
 import { HousingUnitRelevant } from 'src/app/modules/customer/models/housing-unit-relevant.model';
 import { customerService } from 'src/app/modules/customer/services/customer.service';
 import { HousingUnitRelevantService } from 'src/app/modules/customer/services/housing-unit-relevant.service';
@@ -22,32 +26,35 @@ import { SearchService } from './../services/search.service';
 })
 export class SearchComponent implements OnInit {
   formSearch: FormGroup;
+  customerId = this._serviceCustomer.customerId;
   searchParams: Search = new Search();
   address: string;
-  listHousingUnit: HousingUnit[];
+  listHousingUnit: HousingUnitFull[];
   panelOpenState = false;
   listPropertyConditions: PropertyCondition[];
   listFurnitureLevel: FurnitureLevel[];
   open: boolean = false;
   valueDescription = '';
-  // mapHousingUnitImage: Map<HousingUnit, string> = new Map<
-  //   HousingUnit,
-  //   string
-  // >();
+  housingUnitRelevant?: HousingUnitRelevant = undefined;
 
-  // title = 'autoCompleteGoogleMaps';
-  // lat = 51.678418;
-  // lng = 7.809007;
+  @ViewChild('mapSearchField') searchField: ElementRef;
+  @ViewChild(GoogleMap) googleMap: GoogleMap;
+  private _searchLat: number;
+  private _searchLng: number;
+  currentUser: Customer2;
+  unitOwners: Customer2[] = [];
+  hide: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
+    private _router: Router,
     private _service: SearchService,
-    private _serviceHousingUnitImage: HousingUnitImageService,
     private _serviceCustomer: customerService,
     private _serviceHousingUnitRelevant: HousingUnitRelevantService,
-    private _serviceHousingUnitFull: HousingUnitFullService,
     private _servicePropertyCondition: PropertyConditionService,
-    private _serviceFurnitureLevel: FurnitureLevelService
+    private _serviceFurnitureLevel: FurnitureLevelService,
+    private _snackBar: MatSnackBar,
+    private _app: AppComponent
   ) {}
 
   ngOnInit() {
@@ -57,6 +64,34 @@ export class SearchComponent implements OnInit {
     this.search();
     this.getPropertyCondition();
     this.getFurnitureLevel();
+    this.getCustomerById();
+  }
+  ngAfterViewInit() {
+    console.log(this.googleMap, this.searchField);
+    const searchBox = new google.maps.places.SearchBox(
+      this.searchField.nativeElement
+    );
+    searchBox.addListener('places_changed', () => {
+      const places = searchBox.getPlaces();
+      if (places.length === 0) {
+        return;
+      }
+      const bounds = new google.maps.LatLngBounds();
+      places.forEach((place) => {
+        if (!place.geometry || !place.geometry?.location) {
+          return;
+        }
+        this._searchLat = place.geometry.location.lat();
+        this._searchLng = place.geometry.location.lng();
+        if (place.geometry.viewport) {
+          bounds.union(place.geometry.viewport);
+        } else {
+          bounds.extend(place.geometry.location);
+        }
+      });
+      this.googleMap.fitBounds(bounds);
+    });
+    this.search();
   }
   getPropertyCondition() {
     this._servicePropertyCondition
@@ -70,204 +105,153 @@ export class SearchComponent implements OnInit {
       this.listFurnitureLevel = res;
     });
   }
+  getFurnitureLevelById(id: number): string {
+    let s = 'ללא';
+    this.listFurnitureLevel.forEach((furniture) => {
+      if (furniture.id == id) s = furniture.level;
+    });
+    return s;
+  }
+  getPropertyConditionById(id: number): string {
+    let s = 'סביר';
+    this.listPropertyConditions.forEach((p) => {
+      if (p.id == id) s = p.condition;
+    });
+    return s;
+  }
   search() {
     this.searchParams = this.formSearch.value;
-    this.searchParams.CustomersId=this._serviceCustomer.customerId
+    this.searchParams.customersId = this._serviceCustomer.customerId;
+    this.searchParams.lat = this._searchLat;
+    this.searchParams.lng = this._searchLng;
+    console.log(this.searchParams.lat, this.searchParams.lng);
+    if ((this.searchParams.address = '')) {
+      this.searchParams.lat = null;
+      this.searchParams.lng = null;
+    }
     console.log(this.searchParams);
     this._service.search(this.searchParams).subscribe((res) => {
       this.listHousingUnit = res;
+      let index = 0;
+      this.listHousingUnit.forEach((element) => {
+        this.getUnitOwner(element.housingUnit.unitOwnersId, index++);
+      });
       console.log(this.listHousingUnit);
-      this._serviceHousingUnitFull.GetHousingUnitFull(res);
-      // this.listHousingUnit.forEach((element) => {
-      //   this._serviceHousingUnitImage
-      //     .GetHousingUnitImageById(Number(element.id))
-      //     .subscribe((image) => {
-      //       this.mapHousingUnitImage.set(element, image.images);
-      //       console.log(this.mapHousingUnitImage);
-      //     });
-      // });
-      //להחזיר מהשרת מערך של פולים לפי הרז.
     });
   }
-  isFavorite(id: string) {
-    // console.log(this._serviceHousingUnitRelevant.listHousingUnitRelevant);
-    // console.log(this._serviceHousingUnitRelevant.isRelevantById(Number(id)));
-    return this._serviceHousingUnitRelevant.isRelevantById(Number(id));
+
+  addFavorite(id: number) {
+    this.housingUnitRelevant = {
+      CustomersId: this._serviceCustomer.customerId,
+      HousingUnitId: id,
+    };
+    if (this._serviceCustomer.getUserType() > 0) {
+      try {
+        this._serviceHousingUnitRelevant
+          .AddHousingUnitRelevant(this.housingUnitRelevant)
+          .subscribe(() => {
+            this._app.numFavorite += 1;
+            this.housingUnitRelevant = undefined;
+            this.search();
+          });
+      } catch (err) {
+        this._snackBar.open('אופסס, קרתה תקלה בשרת, נסה שוב!', '  ', {
+          duration: 2000,
+        });
+      }
+    } else {
+      this._snackBar.open('נא התחבר לחשבונך, או צור חשבון חדש', '  ', {
+        duration: 2000,
+      });
+    }
   }
-  addFavorite(id: string) {}
-  removeFavorite(id: string) {}
+  removeFavorite(id: number) {
+    this.housingUnitRelevant = {
+      CustomersId: this._serviceCustomer.customerId,
+      HousingUnitId: id,
+    };
+    try {
+      this._serviceHousingUnitRelevant
+        .deleteHousingUnitRelevant(this.housingUnitRelevant)
+        .subscribe(() => {
+          this.search();
+          this._app.numFavorite -= 1;
+        });
+    } catch (err) {
+      this._snackBar.open('אופסס, קרתה תקלה בשרת, נסה שוב!', '  ', {
+        duration: 2000,
+      });
+    }
+  }
 
   initForm(search: Search): void {
     this.formSearch = new FormGroup({
-      SearchId: new FormControl(search.SearchId),
-      CustomersId: new FormControl(search.CustomersId),
-      UnitOwnersId: new FormControl(search.UnitOwnersId),
-      PropertyCondition: new FormControl(search.PropertyCondition),
-      Furniture: new FormControl(search.Furniture),
-      DateSearch: new FormControl(search.DateSearch),
+      SearchId: new FormControl(search.searchId),
+      CustomersId: new FormControl(search.customersId),
+      UnitOwnersId: new FormControl(search.unitOwnersId),
+      PropertyCondition: new FormControl(search.propertyCondition),
+      Furniture: new FormControl(search.furniture),
+      DateSearch: new FormControl(search.dateSearch),
       //תאריך פינוי
-      EvacuationDate: new FormControl(search.EvacuationDate),
-      PublishDate: new FormControl(search.PublishDate),
-      City: new FormControl(search.City || this.address),
-      Neighborhood: new FormControl(search.Neighborhood),
-      Street: new FormControl(search.Street),
-      Description: new FormControl(search.Description),
-      Number: new FormControl(search.Number),
+      EvacuationDate: new FormControl(search.evacuationDate),
+      PublishDate: new FormControl(search.publishDate),
+      Address: new FormControl(search.address || this.address),
+      Description: new FormControl(search.description),
       //ok
-      FromFloor: new FormControl(search.FromFloor),
-      ToFloor: new FormControl(search.ToFloor),
-      FromArea: new FormControl(search.FromArea),
-      ToArea: new FormControl(search.ToArea),
-      MinRoomsNum: new FormControl(search.MinRoomsNum),
-      MaxRoomsNum: new FormControl(search.MaxRoomsNum),
-      MinPrice: new FormControl(search.MinPrice),
-      MaxPrice: new FormControl(search.MaxPrice),
-
-      ViewsNum: new FormControl(search.ViewsNum),
-      Relevant: new FormControl(search.Relevant),
-      Parking: new FormControl(search.Parking),
-      PandorDoors: new FormControl(search.PandorDoors),
-      SolarHeater: new FormControl(search.SolarHeater),
-      AirConditioning: new FormControl(search.AirConditioning),
-      AccessForDisabled: new FormControl(search.AccessForDisabled),
-      Animal: new FormControl(search.Animal),
-      SecurityRoom: new FormControl(search.SecurityRoom),
-      Elevator: new FormControl(search.Elevator),
-      Terrace: new FormControl(search.Terrace),
+      FromFloor: new FormControl(search.fromFloor),
+      ToFloor: new FormControl(search.toFloor),
+      FromArea: new FormControl(search.fromArea),
+      ToArea: new FormControl(search.toArea),
+      MinRoomsNum: new FormControl(search.minRoomsNum),
+      MaxRoomsNum: new FormControl(search.maxRoomsNum),
+      MinPrice: new FormControl(search.minPrice),
+      MaxPrice: new FormControl(search.maxPrice),
+      ViewsNum: new FormControl(search.viewsNum),
+      Relevant: new FormControl(search.relevant),
+      Parking: new FormControl(search.parking),
+      PandorDoors: new FormControl(search.pandorDoors),
+      SolarHeater: new FormControl(search.solarHeater),
+      AirConditioning: new FormControl(search.airConditioning),
+      AccessForDisabled: new FormControl(search.accessForDisabled),
+      Animal: new FormControl(search.animal),
+      SecurityRoom: new FormControl(search.securityRoom),
+      Elevator: new FormControl(search.elevator),
+      Terrace: new FormControl(search.terrace),
+      floorsBuilding: new FormControl(search.floorsBuilding),
+      propertyTax: new FormControl(search.propertyTax),
+      committeeHome: new FormControl(search.committeeHome),
+      payment: new FormControl(search.payment),
+      flexible: new FormControl(search.flexible),
+      partners: new FormControl(search.partners),
+      warehouse: new FormControl(search.warehouse),
+      longTerm: new FormControl(search.longTerm),
+      kosherKitchen: new FormControl(search.kosherKitchen),
+      bars: new FormControl(search.bars),
     });
   }
   openFilter() {
     this.open = !this.open;
     console.log(this.open);
   }
+  openDetailsHousingUnit(id: number) {
+    this._router.navigate([]).then((result) => {
+      window.open('../details/' + id, '_blank');
+    });
+  }
+  getCustomerById() {
+    this._serviceCustomer.getCustomerId();
+    this._serviceCustomer
+      .GetCustomerById(this._serviceCustomer.customerId)
+      .subscribe((customer) => {
+        this.currentUser = customer;
+      });
+  }
+  isActive() {
+    if (this.currentUser.isActive) this.hide = true;
+  }
+  getUnitOwner(id: number, index: number) {
+    this._serviceCustomer.GetCustomerById(id).subscribe((c) => {
+      this.unitOwners[index] = c;
+    });
+  }
 }
-// <!--<mat-checkbox class="m-1" formControlName="Parking"> חניה</mat-checkbox>
-// <mat-checkbox formControlName="PandorDoors"> דלתות פנדור</mat-checkbox>
-// <mat-checkbox formControlName="SolarHeater"> דוד שמש</mat-checkbox>
-// <mat-checkbox formControlName="AirConditioning">
-//   מיזוג אוויר</mat-checkbox
-// >
-// <mat-checkbox formControlName="AccessForDisabled">
-//   גישה לנכים</mat-checkbox
-// >
-// <mat-checkbox formControlName="Animal"> בעלי חיים</mat-checkbox> -->
-// <!--חנייה-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="Parking"
-//   autocomplete="off"
-//   formControlName="Parking"
-// />
-// <label class="btn btn-outline-primary m-1" for="Parking"
-//   >חנייה<mat-icon> local_parking</mat-icon></label
-// >
-// <!--ממ"ד-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="SecurityRoom"
-//   autocomplete="off"
-//   formControlName="SecurityRoom"
-// />
-// <label class="btn btn-outline-primary m-1" for="SecurityRoom"
-//   >ממ"ד<mat-icon>security</mat-icon></label
-// >
-// <!--מחסן
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="btn-check3"
-//   autocomplete="off"
-// />
-// <label class="btn btn-outline-primary" for="btn-check3">מחסן</label>-->
-// <!--גישה לנכים-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="AccessForDisabled"
-//   autocomplete="off"
-//   formControlName="AccessForDisabled"
-// />
-// <label class="btn btn-outline-primary m-1" for="AccessForDisabled"
-//   >גישה לנכים<mat-icon>accessible</mat-icon></label
-// >
-// <!--מעלית-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="Elevator"
-//   autocomplete="off"
-//   formControlName="Elevator"
-// />
-// <label class="btn btn-outline-primary m-1" for="Elevator"
-//   >מעלית<span class="material-icons">elevator</span></label
-// >
-// <!--מרפסת-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="Terrace"
-//   autocomplete="off"
-//   formControlName="Terrace"
-// />
-// <label class="btn btn-outline-primary m-1" for="Terrace"
-//   >מרפסת<span class="material-icons">balcony</span></label
-// >
-// <!--דוד שמש-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="SolarHeater"
-//   autocomplete="off"
-//   formControlName="SolarHeater"
-// />
-// <label class="btn btn-outline-primary m-1" for="SolarHeater"
-//   >דוד שמש<mat-icon>wb_sunny</mat-icon></label
-// >
-// <!--מיזוג אוויר-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="AirConditioning"
-//   autocomplete="off"
-//   formControlName="AirConditioning"
-// />
-// <label class="btn btn-outline-primary m-1" for="AirConditioning"
-//   >מיזוג אוויר<mat-icon>ac_unit</mat-icon></label
-// >
-// <!--דלתות פנדור-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="PandorDoors"
-//   autocomplete="off"
-//   formControlName="PandorDoors"
-// />
-// <label class="btn btn-outline-primary m-1" for="PandorDoors"
-//   >דלתות פנדור<span class="material-icons">sensor_door</span></label
-// >
-// <!--בעלי חיים-->
-// <input
-//   mdbCheckbox
-//   type="checkbox"
-//   class="btn-check"
-//   id="Animal"
-//   autocomplete="off"
-//   formControlName="Animal"
-// />
-// <label class="btn btn-outline-primary m-1" for="Animal"
-//   >בע"ח<img
-//     class="cat"
-//     src="../../../../../assets/icons/cat.jpg"
-//     alt="animal"
-// /></label>

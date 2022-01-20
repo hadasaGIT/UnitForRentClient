@@ -1,13 +1,565 @@
-<p>housing-unit-list works!</p>
+<ng-template #content style="width: 100%">
+  <mat-card style="margin: 0; padding: 0; min-width: 100%">
+    <p class="main-title text-center">עדכון פרטי היחידה</p>
+    <mat-card style="min-width: 85%" *ngIf="housingUnitToUpdate">
+      <div class="card-footer">עריכת פרטים על המודעה</div>
+      <form [formGroup]="updateForm" class="pt-2">
+        <div class="d-flex flex-wrap full-width">
+          <!--כתובת-->
+          <div class="form-group big">
+            <label for="address">כתובת:</label>
+            <input
+              #mapSearchField
+              formControlName="address"
+              type="text"
+              class="form-control"
+              placeholder="הקלד כתובת מלאה לדוגמא מעלה החמישה 17 ראשון לציון"
+            />
+          </div>
+          <!--שטח-->
+          <div class="form-group mini">
+            <label for="area">שטח:</label>
+            <input
+              formControlName="area"
+              type="number"
+              class="form-control"
+              id="area"
+              placeholder="שטח"
+            />
+          </div>
+          <!--מספר חדרים-->
+          <div class="form-group mini">
+            <label for="roomsNum">חדרים:</label>
+            <input
+              formControlName="roomsNum"
+              type="number"
+              class="form-control"
+              id="roomsNum"
+              placeholder="מספר חדרים"
+            />
+          </div>
+          <!--קומה-->
+          <div class="form-group mini">
+            <label for="floor">קומה:</label>
+            <input
+              formControlName="floor"
+              type="number"
+              class="form-control"
+              id="floor"
+              placeholder="מספר הקומה"
+            />
+          </div>
+          <!--קומות בבניין-->
+          <div class="form-group mini">
+            <label for="floorsBuilding">קומות בבניין:</label>
+            <input
+              formControlName="floorsBuilding"
+              type="number"
+              class="form-control"
+              id="floorsBuilding"
+              placeholder="מספר קומות בבנין היחידה"
+            />
+          </div>
+          <!--תאריך כניסה-->
+          <div class="form-group small">
+            <label for="occupancyDate">תאריך כניסה:</label>
+            <input
+              formControlName="occupancyDate"
+              type="date"
+              [value]="housingUnitToUpdate.occupancyDate"
+              class="form-control"
+              id="occupancyDate"
+            />
+          </div>
+          <!--תאריך פינוי-->
+          <div class="form-group small">
+            <label for="evacuationDate">השכרה עד לתאריך:</label>
+            <input
+              formControlName="evacuationDate"
+              type="date"
+              class="form-control"
+              id="evacuationDate"
+              placeholder="אם השכירות מוגבלת עד לתאריך מסוים- סמן כאן!"
+            />
+          </div>
+          <!--רמת ריהוט-->
+          <div class="mt-2 input-group">
+            <div class="input-group-append">
+              <label class="input-group-text" for="furniture">רמת ריהוט</label>
+            </div>
+            <select
+              formControlName="furniture"
+              class="custom-select"
+              id="furniture"
+            >
+              <option
+                *ngFor="let level of listFurnitureLevel"
+                [value]="level.id"
+              >
+                {{ level.level }}
+              </option>
+            </select>
+          </div>
+          <!--מצב הנכס-->
+          <div class="mt-2 input-group">
+            <div class="input-group-append">
+              <label class="input-group-text" for="propertyCondition"
+                >מצב הנכס:</label
+              >
+            </div>
+            <select
+              formControlName="propertyCondition"
+              class="custom-select"
+              id="propertyCondition"
+            >
+              <option *ngFor="let p of listPropertyConditions" [value]="p.id">
+                {{ p.condition }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <h2>תוספות:</h2>
+        <div class="checkboxes">
+          <!--חנייה-->
+          <mat-checkbox
+            formControlName="parking"
+            [checked]="housingUnitToUpdate.parking"
+            class="example-margin"
+          >
+            חנייה</mat-checkbox
+          >
+          <!--ממ"ד-->
+          <mat-checkbox
+            formControlName="securityRoom"
+            [checked]="housingUnitToUpdate.securityRoom"
+            class="example-margin"
+          >
+            ממ"ד</mat-checkbox
+          >
+          <!--גישה לנכים-->
+          <mat-checkbox
+            formControlName="accessForDisabled"
+            [checked]="housingUnitToUpdate.accessForDisabled"
+            class="example-margin"
+          >
+            גישה לנכים</mat-checkbox
+          >
+          <!--מעלית-->
+          <mat-checkbox
+            formControlName="elevator"
+            [checked]="housingUnitToUpdate.elevator"
+            class="example-margin"
+          >
+            מעלית</mat-checkbox
+          >
+          <!--מרפסת-->
+          <mat-checkbox
+            formControlName="terrace"
+            [checked]="housingUnitToUpdate.terrace"
+            class="example-margin"
+          >
+            מרפסת</mat-checkbox
+          >
+          <!--דוד שמש-->
+          <mat-checkbox
+            formControlName="solarHeater"
+            [checked]="housingUnitToUpdate.solarHeater"
+            class="example-margin"
+          >
+            דוד שמש</mat-checkbox
+          >
+          <!--מיזוג אוויר-->
+          <mat-checkbox
+            formControlName="airConditioning"
+            [checked]="housingUnitToUpdate.airConditioning"
+            class="example-margin"
+          >
+            מיזוג אוויר</mat-checkbox
+          >
+          <!--דלתות פנדור-->
+          <mat-checkbox
+            formControlName="pandorDoors"
+            [checked]="housingUnitToUpdate.pandorDoors"
+            class="example-margin"
+          >
+            דלתות פנדור</mat-checkbox
+          >
+          <!--בעלי חיים-->
+          <mat-checkbox
+            formControlName="animal"
+            [checked]="housingUnitToUpdate.animal"
+            class="example-margin"
+          >
+            בע"ח</mat-checkbox
+          >
+          <!--סורגים-->
+          <mat-checkbox
+            formControlName="bars"
+            [checked]="housingUnitToUpdate.bars"
+            class="example-margin"
+          >
+            סורגים</mat-checkbox
+          >
+          <!--מטבח כשר-->
+          <mat-checkbox
+            formControlName="kosherKitchen"
+            [checked]="housingUnitToUpdate.kosherKitchen"
+            class="example-margin"
+          >
+            מטבח כשר</mat-checkbox
+          >
+          <!--לטווח ארוך-->
+          <mat-checkbox
+            formControlName="longTerm"
+            [checked]="housingUnitToUpdate.longTerm"
+            class="example-margin"
+          >
+            לטווח ארוך</mat-checkbox
+          >
+          <!--מחסן-->
+          <mat-checkbox
+            formControlName="warehouse"
+            [checked]="housingUnitToUpdate.warehouse"
+            class="example-margin"
+          >
+            מחסן</mat-checkbox
+          >
+          <!--לשותפים-->
+          <mat-checkbox
+            formControlName="partners"
+            [checked]="housingUnitToUpdate.partners"
+            class="example-margin"
+          >
+            לשותפים</mat-checkbox
+          >
+        </div>
+        <!--תיאור חופשי-->
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>טקסט חופשי</mat-label>
+          <textarea
+            matInput
+            formControlName="description"
+            style="height: 12vh"
+          ></textarea>
+        </mat-form-field>
+        <div class="d-flex flex-wrap full-width">
+          <!--מחיר-->
+          <mat-form-field appearance="fill" floatLabel="always">
+            <mat-label>מחיר</mat-label>
+            <input
+              matInput
+              type="number"
+              class="example-right-align"
+              placeholder="0"
+              formControlName="price"
+            />
+            <span matSuffix>₪&nbsp; לחודש</span>
+            <span matPrefix>00.</span>
+          </mat-form-field>
+          <!--מחיר גמיש-->
+          <mat-checkbox formControlName="flexible" class="p-3"
+            >גמיש</mat-checkbox
+          >
+          <!--ועד בית-->
+          <mat-form-field appearance="fill" class="small" floatLabel="always">
+            <mat-label>ועד בית</mat-label>
+            <input
+              matInput
+              type="number"
+              class="example-right-align"
+              placeholder="עלות ועד בית לחודש"
+              formControlName="committeeHome"
+            />
+            <span matSuffix>₪&nbsp; לחודש</span>
+            <span matPrefix>00.</span>
+          </mat-form-field>
+          <!--ארנונה לחודשיים-->
+          <mat-form-field appearance="fill" class="small" floatLabel="always">
+            <mat-label>ארנונה</mat-label>
+            <input
+              matInput
+              type="number"
+              class="example-right-align"
+              placeholder="עלות ארנונה לחודשיים"
+              formControlName="propertyTax"
+            />
+            <span matSuffix>₪&nbsp; לחודשיים</span>
+            <span matPrefix>00.</span>
+          </mat-form-field>
+          <!--תשלומים-->
+          <div class="form-group mini">
+            <label for="payment">תשלומים:</label>
+            <input
+              formControlName="payment"
+              type="number"
+              class="form-control"
+              id="payment"
+              placeholder="מספר תשלומים"
+            />
+          </div>
+        </div>
+        <div class="card-footer">סטטוס המודעה</div>
+        <mat-form-field appearance="fill">
+          <mat-label>סטטוס המודעה</mat-label>
+          <select formControlName="relevant" matNativeControl>
+            <option [value]="true">מודעה פעילה</option>
+            <option [value]="false">מודעה לא פעילה</option>
+          </select>
+        </mat-form-field>
+        <div class="card-footer">עריכת תמונות המודעה</div>
+        <div class="center form-input d-flex align-content-start flex-wrap">
+          <div
+            *ngFor="let item of images; let i = index"
+            [attr.data-index]="i"
+            style="width: 20%; margin-bottom: 5%"
+          >
+            <div class="d-flex">
+              <label
+                class="label-upload"
+                role="button"
+                (click)="addImage(i)"
+                for="image-id"
+                role="button"
+                >+</label
+              >
+              <label
+                (click)="removeImage(i)"
+                class="label-upload"
+                role="button"
+                color="primary"
+              >
+                -
+              </label>
+            </div>
+            <div class="preview">
+              <img [src]="item.image" height="100" width="100" />
+            </div>
+            <input
+              class="uploadImg"
+              id="image-id"
+              type="file"
+              accept="image/*"
+              #fileInput
+              (change)="uploadFile(fileInput)"
+            />
+          </div>
+        </div>
+        <div class="buttons">
+          <button class="button-44 reset" (click)="undo()" style="width: 36%">
+            סגור ובטל שינויים
+          </button>
+          <button
+            class="button-44"
+            role="button"
+            (click)="updateHousingUnitFull()"
+          >
+            עדכן הכל!
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </mat-card>
+</ng-template>
 
-<input
-  type="checkbox"
-  #chb
-  (change)="filterHousingUnitByRelevant(chb.checked)"
-/>
-הצג רק מודעות פעילות
-<mat-action-list *ngFor="let HousingUnit of housingUnitList">
-  <button mat-list-item (click)="save()">
-    {{ HousingUnit.id }}
-  </button>
-</mat-action-list>
+<ng-template #questionAnswers>
+  <mat-card class="card-question" style="min-width: 100%">
+    <div class="d-flex pb-3">
+      <img
+        style="width: 5vw"
+        src="../../../../assets/icons/questionAnswer.png"
+      />
+      <span style="font-size: 4vh; padding: 5% 5% 0 0; font-weight: 600"
+        >שאלות ותשובות ללקוחות ({{ questions.length }})</span
+      >
+    </div>
+    <div *ngIf="questions.length > 0; else noQuestions">
+      <div
+        *ngFor="let question of questions; let i = index"
+        [attr.data-index]="i"
+      >
+        <h1><b>ש. </b>{{ question.description }}</h1>
+        <div *ngFor="let answer of answers[i]">
+          <div class="input-group mb-3" style="min-width: 100%">
+            <b>ת. </b
+            ><input
+              [value]="answer.description"
+              type="text"
+              id="description"
+              class="form-control"
+              minlength="3"
+              required
+              name="desc"
+              #updateAns
+              placeholder="כאן אפשר לערוך תשובה  זו"
+            />
+            <button
+              mat-raised-button
+              type="submit"
+              style="background: #ffbc53"
+              id="button-addon1"
+              (click)="updateAnswer(updateAns.value, answer)"
+            >
+              עדכן תשובה
+            </button>
+            <button
+              mat-raised-button
+              type="submit"
+              style="background: #ff5e00"
+              id="button-addon1"
+              (click)="deleteAnswer(answer)"
+            >
+              מחק תשובה
+            </button>
+          </div>
+        </div>
+        <form
+          #questionForm="ngForm"
+          style="padding: 18px 11px 3px 11px; background-color: #bbf1f1"
+        >
+          <div class="input-group mb-3" style="min-width: 100%">
+            <input
+              type="text"
+              id="description"
+              class="form-control"
+              minlength="3"
+              required
+              [(ngModel)]="Addans.value"
+              name="desc"
+              placeholder="כאן אפשר לכתוב תשובה לשאלה זו"
+              #Addans
+            />
+            <button
+              mat-raised-button
+              type="submit"
+              style="background: #ffbc53"
+              id="button-addon1"
+              [disabled]="!questionForm.valid"
+              (click)="addAnswer(Addans.value, question.questionsId)"
+            >
+              הוסף תשובה
+            </button>
+          </div>
+        </form>
+        <mat-divider style="width: 70%; right: 0"></mat-divider>
+      </div>
+    </div>
+    <ng-template #noQuestions>
+      <h1 style="padding-right: 30%">אין שאלות להצגה</h1>
+    </ng-template>
+  </mat-card>
+</ng-template>
+
+<div id="wrapper">
+  <div class="d-flex">
+    <mat-checkbox #chb (change)="filterHousingUnitByRelevant(chb.checked)"
+      >הצג רק מודעות פעילות</mat-checkbox
+    >
+    <mat-form-field appearance="standard">
+      <mat-label>Filter</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="חפש" #input />
+    </mat-form-field>
+  </div>
+
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="housingUnitList" matSort>
+      <div>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>מספר מודעה</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <!-- address Column -->
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            כתובת היחידה
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+        </ng-container>
+
+        <!-- price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>מחיר</th>
+          <td mat-cell *matCellDef="let row">
+            <b>{{ row.price | number: "1.0-2" }}</b> ש"ח לחודש
+          </td>
+        </ng-container>
+
+        <!-- publishDate Column -->
+        <ng-container matColumnDef="publishDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            תאריך עדכון אחרון
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.publishDate | date: "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            סטטוס המודעה
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <p *ngIf="row.relevant">מודעה פעילה</p>
+            <p *ngIf="!row.relevant">מודעה לא פעילה</p>
+          </td>
+        </ng-container>
+
+        <!-- view Column -->
+        <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button color="primary">
+              <mat-icon (click)="view(row)">remove_red_eye</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <!-- edit Column -->
+        <ng-container matColumnDef="edit">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button color="accent">
+              <mat-icon (click)="edit(row, content)">edit</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <!-- questionAnswers Column -->
+        <ng-container matColumnDef="questionAnswers">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button>
+              <mat-icon (click)="viewQuestionAnswers(row.id, questionAnswers)"
+                >question_answer</mat-icon
+              >
+            </button>
+          </td>
+        </ng-container>
+        <!-- delete Column -->
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-icon-button color="warn">
+              <mat-icon (click)="deleteHousingUnit(row)">delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+      </div>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">
+          לא מצאנו מודעה מתאימה לחיפוש שלך! "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      aria-label="בחר מספר מודעות להצגה"
+    ></mat-paginator>
+  </div>
+</div>

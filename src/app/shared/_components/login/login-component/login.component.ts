@@ -38,6 +38,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AppComponent } from 'src/app/app.component';
 import { Login } from '../models/login.model';
 import { LoginResponse } from '../models/LoginResponse.model';
 import { LoginService } from '../services/login.service';
@@ -58,13 +59,20 @@ export class LoginComponent implements OnInit {
     private _LoginService: LoginService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    private app: AppComponent
   ) {}
   //
   async ngOnInit() {
     this.form = this.fb.group({
-      email: ['', Validators.email],
-      password: ['', [Validators.required, Validators.min(3)]],
+      email: ['', [Validators.email, Validators.required]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^(?=.*[0-9])(?=.*[a-z]).{8,32}$'),
+        ],
+      ],
     });
   }
   //login
@@ -86,9 +94,9 @@ export class LoginComponent implements OnInit {
             if (user.userType === 0) {
               console.log('user manager');
               this._router.navigate(['../manager']);
-            } 
-            else {
+            } else {
               console.log('user customer');
+              this.app.getNumFavorite();
               this._router.navigate(['../']);
             }
           } else {

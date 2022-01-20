@@ -24,6 +24,10 @@ import {
   MatStepperPrevious,
 } from '@angular/material/stepper';
 import { HousingUnitRelevantService } from './services/housing-unit-relevant.service';
+import { HousingUnitRelevantComponent } from './components/housing-unit-relevant/housing-unit-relevant.component';
+import { GoogleMapsModule } from '@angular/google-maps';
+// import { PaymentComponent } from './components/payment/payment.component';
+// import { NgxPayPalModule } from 'ngx-paypal';
 
 @NgModule({
   declarations: [
@@ -31,6 +35,8 @@ import { HousingUnitRelevantService } from './services/housing-unit-relevant.ser
     PersonalAreaComponent,
     CustomerInfoComponent,
     HousingUnitListComponent,
+    HousingUnitRelevantComponent,
+    // PaymentComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +46,8 @@ import { HousingUnitRelevantService } from './services/housing-unit-relevant.ser
     HttpClientModule,
     CustomerRoutingModule,
     ReactiveFormsModule,
+    GoogleMapsModule,
+    // NgxPayPalModule,
   ],
   exports: [PublishHousingUnitComponent, CustomerInfoComponent],
   providers: [

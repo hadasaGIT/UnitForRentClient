@@ -17,7 +17,7 @@ import { customerService } from '../../services/customer.service';
 })
 export class CustomerInfoComponent implements OnInit {
   customerById: Customer2;
-  customerId: number = this._customerService.customerId;
+  customerId: number;
   updateForm: FormGroup;
   updateSuccess: boolean = false;
   public hide: boolean = true;
@@ -31,6 +31,8 @@ export class CustomerInfoComponent implements OnInit {
 
   //ng_on_init
   ngOnInit(): void {
+    this._customerService.getCustomerId();
+    this.customerId = this._customerService.customerId;
     this.GetCustomerById();
   }
   //return current user-info

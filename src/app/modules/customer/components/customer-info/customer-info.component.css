@@ -1,11 +1,18 @@
 .mat-form-field {
   text-align: right;
 }
+
 mat-card {
   max-width: 400px;
   margin: 1em auto;
   text-align: center;
 }
+
 mat-form-field {
   display: block;
+}
+
+mat-sidenav-container {
+  background-image: url(../../../../../assets/img/white-wall-living-room-have-sofa-decoration-3d-rendering.jpg);
+  background-repeat: round;
 }

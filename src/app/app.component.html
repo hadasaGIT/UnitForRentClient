@@ -11,7 +11,7 @@
 >
   <a class="navbar-brand me-2" href="#">
     <img
-      src="../assets/img/LOGOֹֹ2.png"
+      src="../assets/img/LOGOֹ2.png"
       alt=""
       width="150px"
       height="100px"
@@ -39,6 +39,14 @@
       >
         פרסום מודעה
       </button>-->
+    <button
+      routerLink="/customer/favorite"
+      mat-raised-button
+      [matBadge]="numFavorite"
+      matBadgeColor="accent"
+    >
+      <mat-icon>favorite</mat-icon>
+    </button>
     <button class="button-6" routerLink="/customer" role="button">
       אזור אישי
     </button>

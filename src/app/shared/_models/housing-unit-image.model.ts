@@ -1,5 +1,6 @@
 export class HousingUnitImage {
+  Id: number;
   housingUnitId: number;
-  images: string;
+  image: string;
   constructor() {}
 }

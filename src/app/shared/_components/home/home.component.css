@@ -1,14 +1,15 @@
-body{
+body {
   font-family: system-ui,
-  -apple-system,
-  system-ui,
-  "Helvetica Neue",
-  Helvetica,
-  Arial,
-  sans-serif;
+    -apple-system,
+    system-ui,
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
 }
+
 .main-title {
-  font-size: 4.5em;
+  font-size: 5vw;
   line-height: 2em;
   letter-spacing: -2px;
   font-weight: bold;
@@ -20,7 +21,7 @@ body{
     Helvetica,
     Arial,
     sans-serif;
-  margin-top: 20%;
+  margin-top: 20vw;
 }
 
 .input-border-m {

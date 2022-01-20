@@ -14,7 +14,20 @@
             formControlName="email"
             required
           />
-          <mat-error> יש לציין כתובת דואר אלקטרוני חוקית. </mat-error>
+          <mat-error
+            *ngIf="
+              form.controls.email.errors && form.controls.email.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.controls.email.errors && form.controls.email.errors.email
+            "
+          >
+            יש לציין כתובת דואר אלקטרוני חוקית.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width-input">
@@ -35,8 +48,23 @@
           >
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
-          <mat-error> יש לציין סיסמא חוקית. </mat-error>
-        </mat-form-field>
+          <mat-error
+            *ngIf="
+              form.controls.password.errors &&
+              form.controls.password.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              form.controls.password.errors &&
+              form.controls.password.errors.pattern
+            "
+          >
+            יש לציין סיסמא חוקית, סיסמא חייבת להכיל אות אחת וספרה אחת ולפחות 8
+            תווים.
+          </mat-error>        </mat-form-field>
 
         <button mat-raised-button color="primary">הכנס</button>
         <p class="m-2">אין לך חשבון? <a link href="register">צור חשבון</a></p>

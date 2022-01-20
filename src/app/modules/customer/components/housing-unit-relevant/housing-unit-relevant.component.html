@@ -1,0 +1,244 @@
+<!--הצגת יחידות דיור תואמות לפרמטרי החיפוש-->
+<p class="main-title">רשימת יחידות מועדפות</p>
+<mat-accordion>
+  <mat-expansion-panel
+    *ngFor="let HousingUnitFull of listHousingUnit; let i = index"
+    [attr.data-index]="i"
+    (opened)="panelOpenState = true"
+    (closed)="panelOpenState = false"
+  >
+    <mat-expansion-panel-header>
+      <div
+        class="card-housing-unit d-flex justify-content-between"
+        style="width: 95%"
+      >
+        <div class="p-2 w-100 bd-highlight">
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-between" style="width: 95%">
+              <div class="">
+                <h3>יחידת דיור</h3>
+                <h2>{{ HousingUnitFull.housingUnit.address }}</h2>
+              </div>
+              <div>
+                <h1 class="pt-4">{{ HousingUnitFull.housingUnit.price }} ₪</h1>
+              </div>
+            </div>
+            <div class="card-header">
+              <span class="text-bottom"
+                >{{ HousingUnitFull.housingUnit.area }} מ"ר</span
+              >
+              <span class="text-bottom"
+                >{{ HousingUnitFull.housingUnit.roomsNum }} חדרים</span
+              >
+              <span class="text-bottom"
+                >קומה {{ HousingUnitFull.housingUnit.floor }}</span
+              >
+
+              <button
+                *ngIf="HousingUnitFull.isFavorite"
+                mat-icon-button
+                color="warn"
+                (click)="removeFavorite(HousingUnitFull.housingUnit.id)"
+              >
+                <mat-icon>favorite</mat-icon>
+              </button>
+              <button
+                *ngIf="!HousingUnitFull.isFavorite"
+                mat-icon-button
+                color="warn"
+                (click)="addFavorite(HousingUnitFull.housingUnit.id)"
+              >
+                <mat-icon>favorite_border</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex-shrink-1 bd-highlight">
+          <img
+            *ngIf="HousingUnitFull.images.length > 0"
+            class="rounded float-start"
+            [src]="HousingUnitFull.images[0]"
+          />
+          <img
+            *ngIf="HousingUnitFull.images.length == 0"
+            class="rounded float-start"
+            src="../../../../../assets/img/LOGOֹ2.png"
+          />
+        </div>
+      </div>
+
+      <!--  <div class="">
+        <img src="../../../../../assets/icons/cat.jpg"/>
+        </div>
+        <mat-panel-title> <div class="bg-success p-2 text-dark bg-opacity-25">
+            {{ HousingUnit.city }}
+          </div></mat-panel-title>
+        <mat-panel-description>
+          <div class="bg-success p-2 text-dark bg-opacity-25">
+            {{ HousingUnit.price }} ₪
+          </div>
+        </mat-panel-description>-->
+    </mat-expansion-panel-header>
+    <div class="d-flex justify-content-around">
+      <div class="param p-4" style="width: 60vw">
+        <label for="description"><b>תיאור היחידה: </b></label>
+        <p id="description">{{ HousingUnitFull.housingUnit.description }}</p>
+
+        <p class="param">
+          <b> תאריך כניסה:</b>
+          {{ HousingUnitFull.housingUnit.evacuationDate | date: "dd/MM/yyyy" }}
+        </p>
+        <p class="param">
+          <b> מצב נכס: </b
+          >{{
+            getPropertyConditionById(
+              HousingUnitFull.housingUnit.propertyCondition
+            )
+          }}
+        </p>
+        <p class="param">
+          <b> תשלומים: </b>0{{ HousingUnitFull.housingUnit.payment }}
+        </p>
+        <p class="param">
+          <b> ריהוט:</b>
+          {{ getFurnitureLevelById(HousingUnitFull.housingUnit.furniture) }}
+        </p>
+      </div>
+      <div class="param p-4">
+        <label for="Extras"><b>תוספות</b></label>
+        <div class="checkboxes" id="Extras">
+          <!--חנייה-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.parking }"
+            ><mat-icon> local_parking</mat-icon>חנייה</span
+          >
+          <!--ממ"ד-->
+          <span
+            class="ml-1"
+            [ngClass]="{
+              gray: !HousingUnitFull.housingUnit.securityRoom
+            }"
+            ><mat-icon>security</mat-icon>ממ"ד</span
+          >
+          <!--גישה לנכים-->
+          <span
+            class="ml-1"
+            [ngClass]="{
+              gray: !HousingUnitFull.housingUnit.accessForDisabled
+            }"
+            ><mat-icon>accessible</mat-icon>גישה לנכים</span
+          >
+          <!--מעלית-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.elevator }"
+            ><span class="material-icons">elevator</span>מעלית</span
+          >
+          <!--מרפסת-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.terrace }"
+            ><span class="material-icons">balcony</span>מרפסת</span
+          >
+          <!--דוד שמש-->
+          <span
+            class="ml-1"
+            [ngClass]="{
+              gray: !HousingUnitFull.housingUnit.solarHeater
+            }"
+            ><mat-icon>wb_sunny</mat-icon>דוד שמש</span
+          >
+          <!--מיזוג אוויר-->
+          <span
+            class="ml-1"
+            [ngClass]="{
+              gray: !HousingUnitFull.housingUnit.airConditioning
+            }"
+            ><mat-icon>ac_unit</mat-icon>מיזוג אוויר</span
+          >
+          <!--דלתות פנדור-->
+          <span
+            class="ml-1"
+            [ngClass]="{
+              gray: !HousingUnitFull.housingUnit.pandorDoors
+            }"
+            ><span class="material-icons">sensor_door</span>דלתות פנדור</span
+          >
+          <!--בעלי חיים-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.animal }"
+            ><span class="material-icons">child_care</span>בע"ח</span
+          >
+          <!--סורגים-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.bars }"
+            ><span class="material-icons">border_all</span>סורגים</span
+          >
+          <!--מטבח כשר-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.kosherKitchen }"
+            ><span class="material-icons">kitchen</span>מטבח כשר</span
+          >
+          <!--לטווח ארוך-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.longTerm }"
+            ><mat-icon>indeterminate_check_box</mat-icon>לטווח ארוך</span
+          >
+          <!--מחסן-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.warehouse }"
+            ><mat-icon>warehouse</mat-icon>מחסן</span
+          >
+          <!--לשותפים-->
+          <span
+            class="ml-1"
+            [ngClass]="{ gray: !HousingUnitFull.housingUnit.partners }"
+            ><mat-icon>people</mat-icon> לשותפים</span
+          >
+        </div>
+      </div>
+      <div class="p-4">
+        <mat-card class="card-phon" *ngIf="unitOwners[i]">
+          <p class="fs-5" style="color: gray">מפרסם/ת המודעה</p>
+          <p class="fs-5">
+            <b> {{ unitOwners[i].firstName }}</b>
+          </p>
+          <button
+            class="button-68 mt-3"
+            role="button"
+            (click)="isActive()"
+            [ngClass]="{ hide: hide }"
+          >
+            <span><mat-icon> phone</mat-icon></span> הצגת מספר טלפון
+          </button>
+
+          <div *ngIf="hide" class="pt-3">
+            <p class="fs-5">
+              <span><mat-icon> stay_current_portrait</mat-icon></span>
+              {{ unitOwners[i].phon1 }}
+            </p>
+            <p class="fs-5 pt-2" *ngIf="unitOwners[i].phon2">
+              <span><mat-icon> stay_current_portrait</mat-icon></span>
+              {{ unitOwners[i].phon2 }}
+            </p>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+    <button
+      mat-icon-button
+      color="primary"
+      (click)="openDetailsHousingUnit(HousingUnitFull.housingUnit.id)"
+    >
+      <mat-icon>open_in_new</mat-icon>
+    </button>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<h1 *ngIf="listHousingUnit.length == 0">אין יחידות שסימנת כמועדפות!</h1>

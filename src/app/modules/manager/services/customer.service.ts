@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Customer } from "../../customer/models/customer.model";
 
-
 @Injectable()
 export class CustomerService {
     GetAllCustomers(): Observable<Customer[]> {

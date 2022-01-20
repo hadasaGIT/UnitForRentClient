@@ -1,10 +1,7 @@
 export class HousingUnit {
-  id: '';
+  id: number;
   unitOwnersId: number;
-  city: string;
-  neighborhood: string;
-  street: string;
-  number: number;
+  address: string;
   floor: number;
   elevator: boolean;
   terrace: boolean;
@@ -24,22 +21,32 @@ export class HousingUnit {
   pandorDoors: boolean;
   area: number;
   accessForDisabled: boolean;
-  animal: boolean | null;
+  animal: boolean;
   securityRoom: boolean;
+  floorsBuilding?: number;
+  propertyTax?: number;
+  committeeHome?: number;
+  payment?: number;
+  flexible: boolean;
+  partners: boolean;
+  warehouse: boolean;
+  longTerm: boolean;
+  kosherKitchen: boolean;
+  bars: boolean;
+  lat?: number;
+  lng?: number;
   constructor() {
-    (this.unitOwnersId = 14),
+    (this.id = 0),
+      (this.unitOwnersId = 14),
       (this.accessForDisabled = false),
       (this.airConditioning = false),
       (this.animal = false),
       (this.area = 0),
-      (this.city = ''),
       (this.description = ''),
       (this.elevator = false),
       (this.evacuationDate = new Date()),
       (this.floor = 2),
       (this.furniture = 1),
-      (this.neighborhood = ''),
-      (this.number = 2),
       (this.occupancyDate = new Date()),
       (this.pandorDoors = false),
       (this.parking = false),
@@ -50,9 +57,16 @@ export class HousingUnit {
       (this.roomsNum = 2),
       (this.securityRoom = false),
       (this.solarHeater = false),
-      (this.street = ''),
+      (this.address = ''),
       (this.terrace = false),
       (this.unitOwnersId = 14),
       (this.viewsNum = 0);
+    this.payment = 0;
+    this.flexible = false;
+    this.partners = false;
+    this.warehouse = false;
+    this.longTerm = false;
+    this.kosherKitchen = false;
+    this.bars = false;
   }
 }

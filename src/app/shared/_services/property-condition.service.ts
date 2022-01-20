@@ -18,7 +18,7 @@ export class PropertyConditionService {
   }
   updatePropertyCondition(pc: PropertyCondition): Observable<boolean> {
     return this._http.put<boolean>(
-      '/api/PropertyCondition/UpdatePropertyCondition',
+      '/api/PropertyCondition/UpdatePropertyCondition/' + pc.id,
       pc
     );
   }

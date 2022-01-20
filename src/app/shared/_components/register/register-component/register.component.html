@@ -6,25 +6,82 @@
         <mat-error *ngIf="!registerForm.valid">
           נא למלא את כל שדות החובה כנדרש!
         </mat-error>
+
         <mat-form-field appearance="fill" class="full-width-input">
           <mat-label>שם פרטי</mat-label>
           <input matInput formControlName="firstName" required />
+          <mat-error
+            *ngIf="
+              registerForm.controls.firstName.errors &&
+              registerForm.controls.firstName.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.firstName.errors &&
+              registerForm.controls.firstName.errors.minlength
+            "
+          >
+            שדה שם פרטי צריך להכיל לפחות 2 אותיות
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width-input">
           <mat-label>שם משפחה</mat-label>
           <input matInput formControlName="lastName" required />
+          <mat-error
+            *ngIf="
+              registerForm.controls.lastName.errors &&
+              registerForm.controls.lastName.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.lastName.errors &&
+              registerForm.controls.lastName.errors.minlength
+            "
+          >
+            שדה שם משפחה צריך להכיל לפחות 2 אותיות
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width-input">
           <mat-label>מספר טלפון</mat-label>
           <input matInput formControlName="phon1" required />
+          <mat-error
+            *ngIf="
+              registerForm.controls.phon1.errors &&
+              registerForm.controls.phon1.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.phon1.errors &&
+              registerForm.controls.phon1.errors.pattern
+            "
+          >
+            מספר טלפון צריך להכיל 9 או 10 ספרות
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width-input">
           <mat-label> מספר טלפון נוסף</mat-label>
           <input matInput formControlName="phon2" />
-        </mat-form-field>
+          <mat-error
+            *ngIf="
+              registerForm.controls.phon2.errors &&
+              registerForm.controls.phon2.errors.pattern
+            "
+          >
+            מספר טלפון צריך להכיל 9 או 10 ספרות
+          </mat-error></mat-form-field
+        >
 
         <mat-form-field appearance="fill" class="full-width-input">
           <mat-label>אימייל</mat-label>
@@ -34,17 +91,31 @@
             formControlName="email"
             required
           />
-          <mat-error> יש לציין כתובת דואר אלקטרוני חוקית. </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.email.errors &&
+              registerForm.controls.email.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.email.errors &&
+              registerForm.controls.email.errors.email
+            "
+          >
+            יש לציין כתובת דואר אלקטרוני חוקית.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width-input">
           <mat-label>סיסמא</mat-label>
           <input
             matInput
-            type="password"
             formControlName="password"
-            required
             [type]="hide ? 'password' : 'text'"
+            required
           />
           <button
             mat-icon-button
@@ -55,7 +126,23 @@
           >
             <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
           </button>
-          <mat-error> יש לציין סיסמא חוקית. </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.password.errors &&
+              registerForm.controls.password.errors.required
+            "
+          >
+            זהו שדה חובה!
+          </mat-error>
+          <mat-error
+            *ngIf="
+              registerForm.controls.password.errors &&
+              registerForm.controls.password.errors.pattern
+            "
+          >
+            יש לציין סיסמא חוקית, סיסמא חייבת להכיל אות אחת וספרה אחת ולפחות 8
+            תווים.
+          </mat-error>
         </mat-form-field>
 
         <button
