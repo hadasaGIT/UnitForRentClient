@@ -91,14 +91,22 @@
               {{ currentHousingUnit.housingUnit.description }}
             </p>
             <mat-list>
-              <mat-list-item class="divider">Item 1</mat-list-item>
-              <mat-list-item class="divider">
-                <p>מ"ר בנוי</p>
+              <mat-list-item class="divider">                
+                <p>תאריך כניסה:</p>
                 <p>
-                  <b>{{ currentHousingUnit.housingUnit.area }}</b>
+                  <b>{{ currentHousingUnit.housingUnit.roomsNum }}</b>
+                </p></mat-list-item>
+              <mat-list-item class="divider">
+                <p>מצב נכס:</p>
+                <p>
+                  <b>{{ currentHousingUnit.housingUnit.propertyCondition }}</b>
                 </p>
               </mat-list-item>
-              <mat-list-item class="divider">Item 3</mat-list-item>
+              <mat-list-item class="divider">                
+                <p>ועד בית לחודש:</p>
+                <p>
+                  <b>{{ currentHousingUnit.housingUnit.committeeHome }}</b>
+                </p></mat-list-item>
             </mat-list>
             <div class="checkboxes" id="Extras">
               <!--חנייה-->
